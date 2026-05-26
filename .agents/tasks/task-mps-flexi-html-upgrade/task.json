@@ -9,6 +9,6 @@
     "tests": "pass",
     "test_quality": "pass",
     "docker_build": "skipped",
-    "summary": "All verification checks pass: File is 441KB (1210 lines), all 10 tabs present, 11 WhatsApp links, USD/IDR calculator working, password-locked Komisi tab, commission image embedded as base64, no external dependencies, valid HTML structure with balanced tags."
+    "summary": "All 14 verification checks pass. File is 441KB (1215 lines). All 10 tabs present. 11+ WhatsApp links. Calculator with IDR/USD working. Password-locked Komisi tab. Commission image lazy-loaded. ARIA accessibility roles added. Monthly estimate clarified. Net cost disclaimer added. Self-contained HTML with no external dependencies."
   }
 }
