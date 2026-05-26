@@ -1,0 +1,7 @@
+{
+  "task_id": "task-mps-flexi-html-upgrade",
+  "task_description": "Create a comprehensive single HTML file for MPS Flexi product (Manulife Indonesia) with all product information organized in tabs, advanced calculator with USD option, password-locked commission tab, and WhatsApp contact on all pages. Replace existing MPS_Flexi_Product.html.",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null
+}
