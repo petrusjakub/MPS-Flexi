@@ -9,6 +9,6 @@
     "tests": "pass",
     "test_quality": "pass",
     "docker_build": "skipped",
-    "summary": "All verification checks pass. HTML structure valid (190 divs balanced, 16 tables, 6 selects all matched). JS syntax valid. All 8 required functions present. No hardcoded 16000 exchange rate. No 'usia 65' references remaining. All product specifications updated across 10 tabs. File is 1320 lines, self-contained."
+    "summary": "All 10 final verification checks pass. HTML structure valid (190 divs balanced). JS syntax valid. No hardcoded exchange rate. No stale 'usia 65' references. Plan A maxAge=70. Live exchange rate with AbortController timeout. Multiple masa bayar terms defined. Hybrid UP input with datalist. Plan B coverage 'sampai usia 110'. inputmode=numeric for mobile. Semantic review v2 APPROVED."
   }
 }
