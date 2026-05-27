@@ -1,0 +1,19 @@
+{
+  "project_type": "Static single-page HTML product reference tool for MPS Flexi insurance product (Manulife Indonesia)",
+  "language": "HTML/CSS/JavaScript (all inline, self-contained)",
+  "build_system": "None - single HTML file, no build process needed",
+  "test_framework": "None - manual verification by opening in browser. Validate HTML structure programmatically.",
+  "build_command": "python3 -c \"import html.parser; p=html.parser.HTMLParser(); f=open('MPS_Flexi_Product.html','r'); content=f.read(); f.close(); print('HTML size:', len(content), 'bytes'); print('Lines:', content.count(chr(10))); assert '<html' in content; assert '</html>' in content; print('PASS: Valid HTML structure')\"",
+  "test_command": "python3 -c \"f=open('MPS_Flexi_Product.html','r'); c=f.read(); f.close(); checks=[('WhatsApp link','wa.me/6287781896087'),('Tab system','showTab'),('Calculator','calculate()'),('Password lock','123'),('USD','USD'),('Plan A','Amanah'),('Plan B','Berkah'),('Plan C','Cermat'),('Komisi','Komisi')]; passed=0; total=len(checks); [print(f'  PASS: {n}') if s in c else print(f'  FAIL: {n} missing') for n,s in checks]; passed=sum(1 for n,s in checks if s in c); print(f'{passed}/{total} checks passed'); assert passed==total, 'Some checks failed'\"",
+  "verification_instructions": "1. Run the build_command to verify HTML structure. 2. Run test_command to verify all required features are present. 3. Check file size is reasonable (under 1MB for self-contained HTML).",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup needed. The project is a single HTML file.",
+  "environment_constraints": "INTEGRATIONS_ONLY network - no external packages can be installed. The HTML must be completely self-contained with inline CSS and JS. No CDN links allowed. The commission image (Komisi MPS Flexi.jpg, 281KB) can be embedded as base64 data URI. No PDF extraction tools available.",
+  "contribution_requirements": "Single HTML file output. Must be self-contained. Indonesian language. Clickable WhatsApp link on all tabs.",
+  "key_patterns": "Existing HTML uses: tab-based navigation with showTab() JS function, card-based layouts, green (#00a758) color scheme matching Manulife branding, sticky WhatsApp banner, responsive design with @media queries, inline styles only.",
+  "relevant_files": [
+    "MPS_Flexi_Product.html",
+    "Komisi MPS Flexi.jpg"
+  ],
+  "directory_structure": "Flat directory with PDFs (source documents, not text-extractable), one JPG (commission structure), and one HTML file (the deliverable to be improved/replaced)."
+}

@@ -1,0 +1,26 @@
+{
+  "id": "FEAT-002",
+  "type": "fix",
+  "description": "Address code review findings: add monthly estimate clarification, lazy-load commission image, add ARIA tab roles, and clarify net cost claim in comparison table.",
+  "status": "completed",
+  "steps": [
+    "Add clarification text to the monthly estimate in calculator results to prevent confusion about payment frequency.",
+    "Implement lazy-loading for the commission image by storing base64 data in a JS variable and only setting img src after password verification succeeds.",
+    "Add role='tablist' to the tab container UL and role='tab' with tabindex='0' to each tab LI element.",
+    "Add '(nominal, belum memperhitungkan nilai waktu uang)' clarification to the 'Biaya Bersih Proteksi: Rp 0' cells in the comparison table."
+  ],
+  "acceptance_criteria": [
+    "Calculator monthly estimate includes text clarifying payment is annual only",
+    "Commission image src is empty on page load and only populated after successful password entry",
+    "Tab navigation elements have role='tablist' and role='tab' attributes",
+    "Comparison table net cost cells include time-value-of-money disclaimer"
+  ],
+  "verification": [
+    "python3 -c \"f=open('MPS_Flexi_Product.html','r'); c=f.read(); f.close(); assert 'pembayaran hanya tahunan' in c; print('PASS: Monthly clarification')\"",
+    "python3 -c \"f=open('MPS_Flexi_Product.html','r'); c=f.read(); f.close(); assert 'var komisiImgData' in c; assert 'id=\\\"komisi-img\\\"' in c; print('PASS: Lazy-load image')\"",
+    "python3 -c \"f=open('MPS_Flexi_Product.html','r'); c=f.read(); f.close(); assert 'role=\\\"tablist\\\"' in c; assert 'role=\\\"tab\\\"' in c; print('PASS: ARIA roles')\"",
+    "python3 -c \"f=open('MPS_Flexi_Product.html','r'); c=f.read(); f.close(); assert 'nominal, belum memperhitungkan nilai waktu uang' in c; print('PASS: Net cost clarification')\""
+  ],
+  "blocked_reason": null,
+  "findings": "All 4 review fixes applied. File size increased marginally (from 441KB to 441KB) due to added text. The base64 image data is now in a JS variable instead of inline in the img src attribute, enabling browsers to begin rendering the page before parsing the large base64 string."
+}
