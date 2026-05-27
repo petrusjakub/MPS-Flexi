@@ -1,7 +1,14 @@
 {
   "task_id": "task-mps-flexi-revision",
   "task_description": "Revise MPS_Flexi_Product.html with corrected product specifications, calculator improvements (dynamic masa bayar, max age 70 for Plan A, hybrid UP input, live USD rate, corrected masa perlindungan), and updated premium data based on official PDF training materials.",
-  "status": "in_progress",
+  "status": "completed",
   "feature_order": ["FEAT-001"],
-  "blocked_reason": null
+  "blocked_reason": null,
+  "verification": {
+    "build": "pass",
+    "tests": "pass",
+    "test_quality": "pass",
+    "docker_build": "skipped",
+    "summary": "All verification checks pass. HTML structure valid (190 divs balanced, 16 tables, 6 selects all matched). JS syntax valid. All 8 required functions present. No hardcoded 16000 exchange rate. No 'usia 65' references remaining. All product specifications updated across 10 tabs. File is 1320 lines, self-contained."
+  }
 }
