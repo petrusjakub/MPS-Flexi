@@ -167,7 +167,7 @@ PETRUS JAKUB MANULIFE 087781896087</a>
 <h3>&#128154; Plan B - Berkah</h3>
 <span class="badge badge-syariah">Syariah</span>
 <span class="badge badge-plan">Level Premium</span>
-<div class="price">mulai Rp 22 juta<small>/tahun (UP 1M, Pria 40th, masa bayar 15th)</small></div>
+<div class="price">mulai Rp 22 juta<small>/tahun (UP 1M, Pria 40th, masa bayar 5th)</small></div>
 <ul>
 <li>Kontribusi tetap selama masa bayar (5/10/15 tahun)</li>
 <li>Masa perlindungan: sampai usia 110 tahun</li>
@@ -318,9 +318,9 @@ PETRUS JAKUB MANULIFE 087781896087</a>
 
 <div class="info-box">
 <strong>&#128161; Contoh Sederhana:</strong><br>
-Pria 40 tahun, UP 1 Miliar. Bayar Rp 22 juta/tahun selama 15 tahun = total Rp 330 juta.<br>
+Pria 40 tahun, UP 1 Miliar. Bayar Rp 22 juta/tahun selama 5 tahun = total Rp 110 juta.<br>
 - Jika meninggal dalam masa perlindungan: keluarga dapat Rp 1 Miliar<br>
-- Jika hidup sampai akhir masa: dapat kembali Rp 330 juta<br>
+- Jika hidup sampai akhir masa: dapat kembali Rp 110 juta<br>
 <strong>Jadi uangnya TIDAK HILANG!</strong>
 </div>
 
@@ -457,7 +457,7 @@ Pria 40 tahun, UP 1 Miliar. Bayar Rp 140 juta/tahun selama 5 tahun saja = total 
 <tr><td><strong>Uang Kembali</strong></td><td>&#10060; Tidak ada</td><td>&#9989; 100% kontribusi</td><td>&#9989; 100% premi</td></tr>
 <tr><td><strong>Kapan Uang Kembali</strong></td><td>-</td><td>Akhir masa perlindungan</td><td>Akhir masa perlindungan</td></tr>
 <tr><td><strong>Contoh Premi</strong><br>(Pria 40th, UP 1M)</td><td>Rp 4 juta/tahun</td><td>Rp 22 juta/tahun</td><td>Rp 140 juta/tahun</td></tr>
-<tr><td><strong>Total Bayar</strong><br>(Pria 40th, UP 1M)</td><td>Bervariasi per tahun</td><td>Rp 330 juta (15th)</td><td>Rp 700 juta (5th)</td></tr>
+<tr><td><strong>Total Bayar</strong><br>(Pria 40th, UP 1M)</td><td>Bervariasi per tahun</td><td>Rp 110 juta (5th)</td><td>Rp 700 juta (5th)</td></tr>
 <tr><td><strong>Cocok Untuk</strong></td><td>Budget terbatas, butuh UP besar</td><td>Ingin proteksi + tabungan Syariah</td><td>Cash flow tinggi, ingin cepat selesai</td></tr>
 </table>
 </div>
@@ -559,7 +559,7 @@ Pria 40 tahun, UP 1 Miliar. Bayar Rp 140 juta/tahun selama 5 tahun saja = total 
 </table>
 
 <h3>Plan B - Berkah (Syariah, Level Premium) - per UP Rp 100 Juta</h3>
-<p>Kontribusi per tahun, tetap selama masa bayar. Pilihan masa bayar: 5/10/15 tahun. Tabel di bawah untuk masa bayar 15 tahun. Masa perlindungan: sampai usia 110 tahun.</p>
+<p>Kontribusi per tahun, tetap selama masa bayar. Pilihan masa bayar: 5/10/15 tahun. Tabel di bawah untuk masa bayar 5 tahun. Masa perlindungan: sampai usia 110 tahun.</p>
 <table>
 <tr><th>Usia</th><th>Pria</th><th>Wanita</th></tr>
 <tr><td>17</td><td>Rp 530.000</td><td>Rp 450.500</td></tr>
@@ -649,7 +649,7 @@ Pria 40 tahun, UP 1 Miliar. Bayar Rp 140 juta/tahun selama 5 tahun saja = total 
 <div class="calc-row">
 <div class="calc-field">
 <label>&#128176; Uang Pertanggungan (UP)</label>
-<input type="text" id="calc-up-input" list="calc-up-list" value="1.000.000.000" onchange="formatUPInput()" oninput="formatUPInput()" placeholder="Ketik nominal atau pilih dari daftar">
+<input type="text" id="calc-up-input" list="calc-up-list" value="1.000.000.000" onchange="formatUPInput()" inputmode="numeric" placeholder="Ketik nominal atau pilih dari daftar">
 <datalist id="calc-up-list">
 <option value="100.000.000">Rp 100 Juta</option>
 <option value="250.000.000">Rp 250 Juta</option>
@@ -1078,8 +1078,10 @@ function checkKomisiPassword() {
 window.kursUSD = 16500; // fallback default
 window.kursUSDDate = '';
 (function fetchKurs() {
-  fetch('https://open.er-api.com/v6/latest/USD')
-    .then(function(r) { return r.json(); })
+  var controller = new AbortController();
+  var timeoutId = setTimeout(function() { controller.abort(); }, 5000);
+  fetch('https://open.er-api.com/v6/latest/USD', { signal: controller.signal })
+    .then(function(r) { clearTimeout(timeoutId); return r.json(); })
     .then(function(d) {
       if (d && d.rates && d.rates.IDR) {
         window.kursUSD = d.rates.IDR;
@@ -1088,6 +1090,7 @@ window.kursUSDDate = '';
       updateKursDisplay();
     })
     .catch(function() {
+      clearTimeout(timeoutId);
       window.kursUSD = 16500;
       window.kursUSDDate = 'fallback';
       updateKursDisplay();
@@ -1299,7 +1302,11 @@ function calculate() {
     var coverYears = (masaBayar === '15') ? 25 : 15;
     totalText = 'Total bayar ' + payYears + ' tahun: ' + formatCurrency(total, currency) + ' | Uang kembali di tahun ke-' + coverYears + ': ' + formatCurrency(total, currency);
   } else {
-    totalText = 'Plan A: kontribusi tetap selama ' + payYears + ' tahun. Tidak ada pengembalian.';
+    if (payYears === 1) {
+      totalText = 'Plan A (YRT): kontribusi dibayar per tahun, naik sesuai usia pada setiap perpanjangan. Tidak ada pengembalian.';
+    } else {
+      totalText = 'Plan A: kontribusi tetap selama ' + payYears + ' tahun. Tidak ada pengembalian.';
+    }
   }
   document.getElementById('calc-total').textContent = totalText;
 
