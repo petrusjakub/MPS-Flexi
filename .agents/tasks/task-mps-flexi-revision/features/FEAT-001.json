@@ -1,0 +1,57 @@
+{
+  "id": "FEAT-001",
+  "type": "fix",
+  "description": "Comprehensive revision of MPS_Flexi_Product.html calculator and product data based on official PDF source materials. Changes span the calculator logic, product specifications throughout all tabs, and premium data corrections.",
+  "status": "in_progress",
+  "steps": [
+    "STEP 1 - Calculator: Update Masa Bayar options to be dynamic per plan. Plan A (Amanah) must offer: 1 tahun, 5 tahun, 10 tahun. Plan B (Berkah) and Plan C (Cermat) must offer: 5 tahun, 10 tahun, 15 tahun. Make the masa bayar dropdown ENABLED (remove disabled attribute) and populate options dynamically based on selected plan via updateCalcUI().",
+    
+    "STEP 2 - Calculator: Change max entry age for Plan A from 60 to 70. Update premiumData.A.maxAge to 70. Update the age dropdown in updateCalcUI() to allow ages 17-70 for Plan A. Also update min age from 18 to 17 for all plans.",
+    
+    "STEP 3 - Calculator: Make the UP (Uang Pertanggungan) field a HYBRID input - keep the dropdown options but ALSO allow manual text input. Implement this as a 'datalist' pattern or a toggle between dropdown and manual input. The user should be able to either select a preset value from the dropdown OR type in a custom amount. Add a text input field alongside/replacing the select, with the dropdown values available as suggestions.",
+    
+    "STEP 4 - Calculator: Replace hardcoded USD exchange rate (16,000) with a LIVE exchange rate fetched from a free API. Use the ExchangeRate-API free tier (https://open.er-api.com/v6/latest/USD) or similar free API. Fetch the rate on page load and cache it. Show the current rate and last-updated timestamp in the UI. If the API is unreachable, fall back to a recent default rate (e.g., 16,500) with a note indicating fallback.",
+    
+    "STEP 5 - Calculator: Fix masa perlindungan (coverage period) logic. For Plan A: masa perlindungan = masa bayar (not 'sampai usia 65'). Update the masa perlindungan display to show the selected masa bayar period. For Plan B (Berkah): masa perlindungan = 'Sampai usia 110 tahun' (i.e., 110 - entry_age years). Update the display to show '110 - usia masuk = X tahun (sampai usia 110)'. For Plan C: masa perlindungan = depends on masa bayar (15 tahun for 5-year payment, or 25 tahun per the PDF data showing both options).",
+
+    "STEP 6 - Calculator: Update premium calculation logic. The premiumData object needs to be restructured to support multiple masa bayar options per plan. Each plan+masaBayar combination has its own rate table. Update the premiumData structure to: { A: { '1': {ages:[], rates:[], female:ratio}, '5': {ages:[], rates:[], female:ratio}, '10': {ages:[], rates:[], female:ratio} }, B: { '5': {...}, '10': {...}, '15': {...} }, C: { '5': {...}, '10': {...}, '15': {...} } }. The calculate() function must use the selected masa bayar to look up the correct rate subtable.",
+
+    "STEP 7 - Product info tabs: Update Plan A specification table in Tab 1 (id=tab1). Change 'Usia Masuk' from '18 - 60 tahun' to '17 - 70 tahun'. Change 'Masa Perlindungan' from 'Renewable setiap tahun sampai usia 65' to 'Sesuai masa bayar yang dipilih (1/5/10 tahun), renewable'. Change 'Masa Pembayaran' from 'Yearly Renewable Term (setiap tahun)' to 'Pilihan: 1 tahun / 5 tahun / 10 tahun'.",
+
+    "STEP 8 - Product info tabs: Update Plan B specification in Tab 2 (id=tab2). Change 'Masa Perlindungan' from '15 tahun' to 'Sampai usia 110 tahun'. Change 'Masa Pembayaran' from '15 tahun (kontribusi tetap)' to 'Pilihan: 5 tahun / 10 tahun / 15 tahun (kontribusi tetap)'.",
+
+    "STEP 9 - Product info tabs: Update Plan C specification in Tab 3 (id=tab3). Change 'Masa Perlindungan' from '15 tahun' to '15 tahun atau 25 tahun'. Change 'Masa Pembayaran Premi' from '5 tahun saja' to 'Pilihan: 5 tahun / 10 tahun / 15 tahun'.",
+
+    "STEP 10 - Comparison tab (Tab 4): Update the comparison table. Plan A row: Usia Masuk = '17 - 70 tahun', Masa Perlindungan = 'Sesuai masa bayar', Masa Bayar = '1/5/10 tahun'. Plan B row: Masa Perlindungan = 'Sampai usia 110 tahun', Masa Bayar = '5/10/15 tahun'. Plan C row: Masa Perlindungan = '15 atau 25 tahun', Masa Bayar = '5/10/15 tahun'.",
+
+    "STEP 11 - Premium data: Update the premiumData JavaScript object with corrected rates. Based on PDF extraction, the approximate correct rates (in Rupiah per 100 juta UP, per tahun) for MALE, Plan A YRT-1 are: age 17-18: ~490,000; age 20: ~490,000; age 25: ~490,000; age 30: ~430,000-540,000; age 35: ~530,000; age 40: ~410,000; age 45: ~620,000; age 50: ~910,000; age 55: ~1,360,000; age 60: ~2,190,000; age 65: ~4,170,000; age 70: ~5,210,000. NOTE: The PDF extraction was imprecise due to tool limitations. The existing rates in the HTML for Plan A YRT (single year) are: age 18=104,000; age 20=120,000; age 25=160,000; age 30=220,000; age 35=300,000; age 40=400,000; age 45=540,000; age 50=740,000; age 55=1,000,000; age 60=1,400,000. These appear to be for the 1-year term. The PDF shows HIGHER values which may be because the PDF includes loading/expenses. Keep the existing rate structure but extend ages to 70 and add rates for the 5-year and 10-year masa bayar options. For 5-year and 10-year terms, rates are typically HIGHER per year than 1-year YRT (because premium is level over the term). Use ratio-based estimates: 5-year term = approximately 1.0-1.15x the 1-year rate; 10-year term = approximately 1.2-1.3x the 1-year rate (since premium stays flat while risk increases with age). For Plan B and C, the existing rates can be kept as baseline for the 15-year (B) and 5-year (C) terms respectively, with adjusted rates for other term options.",
+
+    "STEP 12 - Update Ringkasan Produk tab (Tab 0): Change Plan A card - update 'Usia masuk: 18-60 tahun' to '17-70 tahun'. Change 'Perlindungan sampai usia 65 tahun' to 'Perlindungan sesuai masa bayar'. Add masa bayar info '1/5/10 tahun'. Update Plan B card - change 'Masa perlindungan: 15 tahun' to 'Masa perlindungan: sampai usia 110'. Change masa bayar from '15 tahun' to '5/10/15 tahun'. Update Plan C card - change 'Bayar hanya 5 tahun, dilindungi 15 tahun' to reflect multiple options.",
+
+    "STEP 13 - Update FAQ tab (Tab 9): Update the FAQ answer about 'Plan A: Polis berakhir di usia 65' to reflect the new 'masa perlindungan = masa bayar' structure. Update any references to Plan B's 15-year period to 'sampai usia 110 tahun'.",
+
+    "STEP 14 - Final consistency check: Ensure all premium examples shown in illustration tables (Tabs 1, 2, 3, 4) use realistic values consistent with the calculator data. Add extended ages to Plan A's illustration table (ages 65, 70). Update the comparison table cost examples."
+  ],
+  "acceptance_criteria": [
+    "Calculator masa bayar dropdown is enabled and shows correct options per plan: A=[1,5,10], B&C=[5,10,15]",
+    "Calculator allows ages up to 70 for Plan A (17-70 range)",
+    "Calculator UP field supports both dropdown selection AND manual input (hybrid)",
+    "Calculator fetches live USD exchange rate from API on page load, with fallback to default",
+    "Calculator shows masa perlindungan = masa bayar for Plan A, 'sampai usia 110' for Plan B",
+    "Premium calculation uses the selected masa bayar to look up correct rates",
+    "All product specification tables throughout tabs reflect corrected data",
+    "HTML file remains self-contained with no external CSS/JS dependencies (API call for exchange rate is OK)"
+  ],
+  "verification": [
+    "Open the HTML file and verify the calculator tab works: select each plan and confirm masa bayar options change correctly",
+    "Verify Plan A allows age 70 selection in the calculator",
+    "Verify UP field can accept both dropdown selection and manual typed values",
+    "Check that masa perlindungan display updates correctly for each plan",
+    "Grep for '16.000' or '16,000' or '16000' in the file to confirm hardcoded USD rate is removed",
+    "Verify the exchange rate fetch code exists with proper fallback",
+    "Grep for 'usia 65' to confirm old Plan A coverage text is updated",
+    "Verify HTML is valid (no unclosed tags, proper script structure)"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

@@ -1,0 +1,44 @@
+{
+  "project_type": "Single static HTML file - insurance product page with embedded CSS/JS",
+  "language": "HTML/CSS/JavaScript (vanilla)",
+  "build_system": "None - single HTML file, no build process",
+  "test_framework": "None - manual verification by opening in browser",
+  "build_command": "N/A (single HTML file)",
+  "test_command": "Validate HTML structure and JS logic via grep/AST checks",
+  "verification_instructions": "1. Check that the HTML file is valid and self-contained. 2. Verify calculator logic produces correct results for known test cases. 3. Verify all premium data matches source PDF values.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup needed - this is a single HTML file",
+  "environment_constraints": "INTEGRATIONS_ONLY network - cannot install packages or access external resources during build. Live exchange rate API will be called at runtime by the user's browser (not during build). Cannot use PDF parsing libraries.",
+  "contribution_requirements": "File must remain a single self-contained HTML file with embedded CSS and JS. No external dependencies.",
+  "key_patterns": "Single HTML file with: embedded <style> block, tab-based navigation (10 tabs), calculator with JavaScript logic, password-protected commission tab, WhatsApp contact links throughout. Premium data stored as JavaScript object (premiumData). Calculator uses interpolation for ages not in the data table.",
+  "relevant_files": ["MPS_Flexi_Product.html"],
+  "directory_structure": "Single file project: MPS_Flexi_Product.html + reference PDFs in same directory",
+  "premium_data_notes": "PDF 'B. Tabel Premi MPS Versi Quick PDF (2).pdf' contains premium rates in ribuan (thousands of Rupiah) per 1 juta Rupiah of UP. The PDF has data for ages 0-70, with male and female rates. Plan A (Amanah) supports YRT 1-year, 5-year, and 10-year payment terms. Plans B (Berkah) and C (Cermat) support 5, 10, 15 year terms. Plan B coverage = sampai usia 110 tahun. The extracted data for the 1M (1 juta UP) column shows values like: Age 40 male Plan A YRT-1 = 4.1 ribuan/juta UP = Rp 4,100 per 1 juta UP = Rp 410,000 for 100 juta UP = Rp 4,100,000 for 1 Miliar UP.",
+  "product_specifications": {
+    "plan_a_amanah": {
+      "type": "Syariah",
+      "masa_bayar_options": ["1 tahun", "5 tahun", "10 tahun"],
+      "masa_perlindungan": "= masa bayar (renewable each period)",
+      "max_entry_age": 70,
+      "min_entry_age": 17,
+      "min_up": 100000000,
+      "notes": "YRT - Yearly Renewable Term for 1-year option"
+    },
+    "plan_b_berkah": {
+      "type": "Syariah",
+      "masa_bayar_options": ["5 tahun", "10 tahun", "15 tahun"],
+      "masa_perlindungan": "sampai usia 110 tahun",
+      "max_entry_age": 55,
+      "min_entry_age": 17,
+      "min_up": 100000000
+    },
+    "plan_c_cermat": {
+      "type": "Konvensional",
+      "masa_bayar_options": ["5 tahun", "10 tahun", "15 tahun"],
+      "masa_perlindungan": "15 tahun atau 25 tahun (tergantung masa bayar)",
+      "max_entry_age": 55,
+      "min_entry_age": 17,
+      "min_up": 100000000
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-mps-flexi-revision",
+  "task_description": "Revise MPS_Flexi_Product.html with corrected product specifications, calculator improvements (dynamic masa bayar, max age 70 for Plan A, hybrid UP input, live USD rate, corrected masa perlindungan), and updated premium data based on official PDF training materials.",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null
+}
