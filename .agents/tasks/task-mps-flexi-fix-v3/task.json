@@ -9,6 +9,6 @@
     "tests": "pass",
     "test_quality": "pass",
     "docker_build": "skipped",
-    "summary": "All 20 verification checks pass. HTML well-formed (83 divs balanced). PREMI_DATA contains non-linear absolute kontribusi values keyed by UP level. Syariah terminology correctly used for Plan A/B (Uang Santunan, Kontribusi, Peserta) and conventional terms for Plan C (UP, Premi, Nasabah). Dynamic term switching via getTermUP/getTermPremi/getTermNasabah functions. Floating WA icon at bottom-right with correct link. Calculator supports both 'berdasar UP' (dropdown of 10 levels) and 'berdasar kontribusi' (interpolation) modes. Age interpolation for missing ages. File size 717KB (342KB excluding komisi base64 image)."
+    "summary": "All verification checks pass. HTML well-formed (83 divs balanced). PREMI_DATA contains non-linear absolute kontribusi values keyed by UP level (all integers, no floating-point noise). Syariah terminology correctly used for Plan A/B (Uang Santunan, Kontribusi, Peserta) and conventional terms for Plan C (UP, Premi, Nasabah). Dynamic term switching. Floating WA icon at bottom-right. Calculator supports both 'berdasar UP' (dynamically filtered dropdown) and 'berdasar kontribusi' (interpolation) modes. Age interpolation for missing ages. Tabel Premi shows all 12 plan/currency/gender combinations. File size 717KB (342KB excluding komisi base64). Review v2 issues fixed: UP dropdown now filtered, all Tabel Premi buttons present."
   }
 }
