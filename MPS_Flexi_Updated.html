@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MPS Flexi - Manulife Indonesia | Produk Referensi Lengkap</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#333;background:#f5f5f5;padding-bottom:80px}
+a{color:#00a758}
+.wa-banner{background:#25D366;color:#fff;text-align:center;padding:12px 15px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.wa-banner a{color:#fff;text-decoration:none;font-weight:700;font-size:1rem;display:inline-flex;align-items:center;gap:8px}
+.wa-banner a:hover{text-decoration:underline}
+
+/* Floating WA Button */
+.floating-wa {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25D366;
+    color: white;
+    border-radius: 50px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 9999;
+    transition: transform 0.2s ease, background-color 0.2s;
+}
+.floating-wa:hover {
+    transform: translateY(-3px);
+    background-color: #20b858;
+}
+.floating-wa svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
+}
+
+.header{background:linear-gradient(135deg,#00a758 0%,#006838 100%);color:#fff;padding:30px 20px;text-align:center}
+.header h1{font-size:2rem;margin-bottom:5px}
+.header p{font-size:1rem;opacity:.9}
+.tabs-container{background:#fff;border-bottom:2px solid #00a758;position:sticky;top:0;z-index:999;overflow-x:auto;white-space:nowrap;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+.tabs{display:flex;padding:0;list-style:none;min-width:max-content}
+.tabs li{padding:12px 16px;cursor:pointer;font-size:.85rem;font-weight:500;color:#555;border-bottom:3px solid transparent;transition:all .2s;user-select:none}
+.tabs li:hover{background:#e8f5e9;color:#00a758}
+.tabs li.active{color:#00a758;border-bottom-color:#00a758;background:#e8f5e9;font-weight:700}
+.tab-content{display:none;padding:30px 20px;max-width:1200px;margin:0 auto}
+.tab-content.active{display:block}
+.card{background:#fff;border-radius:12px;padding:25px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card h2{color:#00a758;margin-bottom:15px;font-size:1.4rem}
+.card h3{color:#006838;margin:18px 0 10px;font-size:1.1rem}
+.card p,.card li{line-height:1.7;margin-bottom:8px}
+.card ul,.card ol{padding-left:20px}
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.8rem;font-weight:600;margin-right:8px;margin-bottom:5px}
+.badge-syariah{background:#e8f5e9;color:#2e7d32}
+.badge-konvensional{background:#e3f2fd;color:#1565c0}
+.badge-plan{background:#fff3e0;color:#e65100}
+table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.9rem}
+th{background:#00a758;color:#fff;padding:12px 10px;text-align:center;font-weight:600}
+td{padding:10px;text-align:center;border-bottom:1px solid #e0e0e0}
+tr:nth-child(even){background:#f8fdf9}
+tr:hover{background:#e8f5e9}
+.calc-container{background:#fff;border-radius:12px;padding:25px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.calc-row{display:flex;flex-wrap:wrap;gap:15px;margin-bottom:15px}
+.calc-field{flex:1;min-width:200px}
+.calc-field label{display:block;font-weight:600;margin-bottom:5px;color:#333;font-size:.9rem}
+.calc-field select,.calc-field input{width:100%;padding:10px 12px;border:2px solid #ddd;border-radius:8px;font-size:1rem;background:#fff;cursor:pointer;transition:border-color .2s}
+.calc-field select:focus,.calc-field input:focus{border-color:#00a758;outline:none}
+.calc-result{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:12px;padding:25px;margin-top:20px;text-align:center}
+.calc-result h3{color:#2e7d32;font-size:1.2rem;margin-bottom:10px}
+.calc-result .premium{font-size:2rem;font-weight:700;color:#00a758}
+.calc-result .monthly{font-size:1.1rem;color:#006838;margin-top:8px}
+.calc-result .detail-line{font-size:.9rem;color:#555;margin-top:5px}
+.calc-result .note{font-size:.82rem;color:#888;margin-top:12px;font-style:italic}
+.highlight-box{background:#fff8e1;border-left:4px solid #ffc107;padding:15px;margin:15px 0;border-radius:0 8px 8px 0}
+.info-box{background:#e8f5e9;border-left:4px solid #00a758;padding:15px;margin:15px 0;border-radius:0 8px 8px 0}
+.warning-box{background:#fce4ec;border-left:4px solid #e53935;padding:15px;margin:15px 0;border-radius:0 8px 8px 0}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin:20px 0}
+.plan-card{background:#fff;border:2px solid #e0e0e0;border-radius:12px;padding:20px;transition:border-color .2s,transform .2s}
+.plan-card:hover{border-color:#00a758;transform:translateY(-2px)}
+.plan-card h3{text-align:center;color:#00a758;margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid #e8f5e9}
+.plan-card .price{text-align:center;font-size:1.3rem;font-weight:700;color:#333;margin:10px 0}
+.plan-card .price small{font-size:.7rem;color:#666;display:block}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;margin:15px 0}
+.info-item{padding:15px;background:#f8fdf9;border-radius:8px;border-left:3px solid #00a758}
+.info-item strong{color:#00a758;display:block;margin-bottom:5px}
+.password-overlay{text-align:center;padding:60px 20px}
+.password-overlay h3{color:#006838;margin-bottom:10px;font-size:1.3rem}
+.password-overlay p{margin-bottom:20px;color:#666}
+.password-overlay input{padding:12px 20px;border:2px solid #ddd;border-radius:8px;font-size:1rem;width:200px;text-align:center;margin-right:10px}
+.password-overlay input:focus{border-color:#00a758;outline:none}
+.password-overlay button{background:#00a758;color:#fff;border:none;padding:12px 25px;border-radius:8px;font-size:1rem;cursor:pointer;font-weight:600}
+.password-overlay button:hover{background:#006838}
+.password-overlay .error{color:#e53935;margin-top:10px;display:none;font-size:.9rem}
+.komisi-content{display:none}
+.faq-item{border-bottom:1px solid #e0e0e0;padding:15px 0}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-weight:700;color:#006838;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.faq-q:hover{color:#00a758}
+.faq-a{padding-top:10px;color:#555;line-height:1.7;display:none}
+.faq-item.open .faq-a{display:block}
+.faq-item.open .faq-arrow{transform:rotate(180deg)}
+.faq-arrow{transition:transform .2s;font-size:1.2rem;color:#00a758}
+.section-title{font-size:1.3rem;color:#006838;margin:20px 0 10px;padding-bottom:8px;border-bottom:2px solid #e8f5e9}
+@media(max-width:768px){
+.header h1{font-size:1.5rem}
+.tabs li{padding:10px 11px;font-size:.75rem}
+.tab-content{padding:15px 10px}
+.calc-row{flex-direction:column}
+.calc-field{min-width:100%}
+.compare-grid{grid-template-columns:1fr}
+table{font-size:.75rem}
+th,td{padding:6px 4px}
+}
+</style>
+</head>
+<body>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/6287781896087?text=Pak%20Petrus%20saya%20mau%20tanya%20soal%20MPS%20Flexi" class="floating-wa" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Tanya Pak Petrus
+</a>
+
+<!-- Header -->
+<div class="header">
+<h1>MPS Flexi - Manulife Indonesia</h1>
+<p>Manulife Protection Solution Flexi | Asuransi Jiwa Tradisional</p>
+</div>
+
+<!-- Tab Navigation -->
+<div class="tabs-container">
+<ul class="tabs" id="tabNav" role="tablist">
+<li class="active" role="tab" tabindex="0" onclick="showTab(0)">&#127968; Ringkasan Produk</li>
+<li role="tab" tabindex="0" onclick="showTab(1)">&#127311; Plan A - Amanah</li>
+<li role="tab" tabindex="0" onclick="showTab(2)">&#127312; Plan B - Berkah</li>
+<li role="tab" tabindex="0" onclick="showTab(3)">&#127313; Plan C - Cermat</li>
+<li role="tab" tabindex="0" onclick="showTab(4)">&#128202; Perbandingan</li>
+<li role="tab" tabindex="0" onclick="showTab(5)">&#128203; Tabel Premi</li>
+<li role="tab" tabindex="0" onclick="showTab(6)">&#129518; Kalkulator</li>
+<li role="tab" tabindex="0" onclick="showTab(7)">&#128176; Komisi</li>
+<li role="tab" tabindex="0" onclick="showTab(8)">&#128218; Materi Training</li>
+<li role="tab" tabindex="0" onclick="showTab(9)">&#10067; FAQ</li>
+</ul>
+</div>
+
+<!-- TAB 0: Ringkasan Produk -->
+<div class="tab-content active" id="tab0">
+<div class="card">
+<h2>&#127775; Apa itu MPS Flexi?</h2>
+<p><strong>MPS Flexi (Manulife Protection Solution Flexi)</strong> adalah produk asuransi jiwa tradisional (bukan unit-link) dari Manulife Indonesia. Produk ini memberikan perlindungan jiwa murni dengan pilihan yang fleksibel sesuai kebutuhan dan kemampuan finansial Anda.</p>
+<div class="info-box">
+<strong>&#9989; Poin Penting:</strong>
+<ul style="margin-top:8px">
+<li>Bukan unit-link, tidak ada risiko investasi</li>
+<li>Manfaat pasti dan jelas sejak awal</li>
+<li>Tersedia pilihan Syariah dan Konvensional</li>
+<li>Premi/kontribusi terjangkau</li>
+</ul>
+</div>
+</div>
+
+<div class="card">
+<h2>&#128640; 3 Pilihan Plan</h2>
+<div class="compare-grid">
+<div class="plan-card">
+<h3>&#127775; Plan A - Amanah</h3>
+<span class="badge badge-syariah">Syariah</span>
+<span class="badge badge-plan">Term Life</span>
+<ul>
+<li>Pilihan masa bayar: 1/5/10 tahun</li>
+<li>Masa perlindungan sama dengan masa bayar</li>
+<li>Premi paling terjangkau</li>
+<li>Manfaat: 100% UP saat meninggal dunia</li>
+<li>Cocok untuk: Proteksi maksimal, biaya minimal</li>
+</ul>
+</div>
+<div class="plan-card">
+<h3>&#128154; Plan B - Berkah</h3>
+<span class="badge badge-syariah">Syariah</span>
+<span class="badge badge-plan">Level Premium</span>
+<ul>
+<li>Kontribusi tetap selama masa bayar (5/10/15 thn)</li>
+<li>Masa perlindungan: Sampai usia 110 tahun</li>
+<li>Manfaat: 100% UP + Uang Kembali 100%</li>
+<li>Seluruh kontribusi dikembalikan di akhir masa</li>
+<li>Cocok untuk: Proteksi + Tabungan Syariah</li>
+</ul>
+</div>
+<div class="plan-card">
+<h3>&#128142; Plan C - Cermat</h3>
+<span class="badge badge-konvensional">Konvensional</span>
+<span class="badge badge-plan">Limited Pay</span>
+<ul>
+<li>Bayar 5/10/15 tahun, dilindungi 15/25/35 tahun</li>
+<li>Bebas premi setelah masa bayar selesai</li>
+<li>Manfaat: 100% UP + Uang Kembali 100%</li>
+<li>Seluruh premi dikembalikan di akhir masa perlindungan</li>
+<li>Cocok untuk: Selesai bayar lebih cepat</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<!-- TAB 1: Plan A - Amanah -->
+<div class="tab-content" id="tab1">
+<div class="card">
+<h2>&#127775; Plan A - Amanah <span class="badge badge-syariah">Syariah</span></h2>
+<p><strong>Plan A (Amanah)</strong> adalah produk asuransi jiwa berjangka berbasis Syariah dengan sistem Yearly Renewable Term (YRT) atau level term. Murni berfokus pada proteksi tinggi dengan kontribusi yang sangat terjangkau.</p>
+
+<h3>&#128203; Spesifikasi Produk</h3>
+<table>
+<tr><th>Fitur</th><th>Keterangan</th></tr>
+<tr><td>Basis</td><td>Syariah (Tabarru' + Wakalah bil Ujrah)</td></tr>
+<tr><td>Usia Masuk</td><td>18 hingga 70 tahun</td></tr>
+<tr><td>Masa Perlindungan</td><td>Sesuai masa bayar (1/5/10 tahun), renewable</td></tr>
+<tr><td>Minimum UP</td><td>Rp 100.000.000 / USD 10.000</td></tr>
+<tr><td>Minimum Kontribusi</td><td>Rp 4.000.000 / USD 400 (per tahun)</td></tr>
+</table>
+
+<h3>&#127873; Manfaat yang Didapat</h3>
+<ul>
+<li><strong>Santunan Meninggal Dunia:</strong> 100% Uang Pertanggungan</li>
+<li><strong>Otomatis Perpanjang (Khusus 1 Thn/YRT):</strong> Dapat diperpanjang otomatis hingga usia 70 tanpa cek medis ulang.</li>
+</ul>
+</div>
+</div>
+
+<!-- TAB 2: Plan B - Berkah -->
+<div class="tab-content" id="tab2">
+<div class="card">
+<h2>&#128154; Plan B - Berkah <span class="badge badge-syariah">Syariah</span></h2>
+<p><strong>Plan B (Berkah)</strong> adalah asuransi jiwa berjangka Syariah dengan jaminan pengembalian kontribusi 100% (bahkan hingga 120%) jika peserta masih hidup di akhir periode tertentu.</p>
+
+<h3>&#128203; Spesifikasi Produk</h3>
+<table>
+<tr><th>Fitur</th><th>Keterangan</th></tr>
+<tr><td>Basis</td><td>Syariah (Tabarru' + Wakalah bil Ujrah)</td></tr>
+<tr><td>Usia Masuk</td><td>30 Hari hingga 70 tahun</td></tr>
+<tr><td>Masa Pembayaran</td><td>5 / 10 / 15 Tahun</td></tr>
+<tr><td>Masa Perlindungan</td><td>Hingga usia 110 tahun</td></tr>
+<tr><td>Minimum Kontribusi</td><td>Rp 5.000.000 / USD 500 (per tahun)</td></tr>
+</table>
+
+<h3>&#127873; Manfaat yang Didapat</h3>
+<ul>
+<li><strong>Santunan Meninggal Dunia:</strong> 100% Uang Pertanggungan</li>
+<li><strong>Manfaat Hidup (Usia Masuk 0-60 Thn):</strong> 20% pengembalian di Akhir Tahun Polis ke-20, dan 100% pengembalian di Akhir Tahun Polis ke-30 (Total 120%).</li>
+<li><strong>Manfaat Hidup (Usia Masuk 61-70 Thn):</strong> 30% pengembalian di Akhir Tahun Polis ke-15.</li>
+</ul>
+</div>
+</div>
+
+<!-- TAB 3: Plan C - Cermat -->
+<div class="tab-content" id="tab3">
+<div class="card">
+<h2>&#128142; Plan C - Cermat <span class="badge badge-konvensional">Konvensional</span></h2>
+<p><strong>Plan C (Cermat)</strong> memberikan kepastian perlindungan jangka panjang dengan masa pembayaran premi yang singkat dan pengembalian premi 100% di akhir masa perlindungan.</p>
+
+<h3>&#128203; Spesifikasi Produk</h3>
+<table>
+<tr><th>Fitur</th><th>Keterangan</th></tr>
+<tr><td>Basis</td><td>Konvensional</td></tr>
+<tr><td>Usia Masuk</td><td>30 Hari hingga 70 tahun</td></tr>
+<tr><td>Masa Pembayaran</td><td>5 / 10 / 15 Tahun</td></tr>
+<tr><td>Masa Perlindungan</td><td>15 / 25 / 35 Tahun</td></tr>
+<tr><td>Minimum Premi</td><td>Rp 5.000.000 / USD 500 (per tahun)</td></tr>
+</table>
+
+<h3>&#127873; Manfaat yang Didapat</h3>
+<ul>
+<li><strong>Santunan Meninggal Dunia:</strong> 100% Uang Pertanggungan</li>
+<li><strong>Manfaat Akhir Masa Asuransi:</strong> 100% pengembalian premi utuh di akhir masa perlindungan.</li>
+</ul>
+</div>
+</div>
+
+<!-- TAB 4: Perbandingan Plan -->
+<div class="tab-content" id="tab4">
+<div class="card">
+<h2>&#128202; Perbandingan Ringkas</h2>
+<table>
+<tr><th>Fitur</th><th style="background:#2e7d32">Plan A - Amanah</th><th style="background:#1565c0">Plan B - Berkah</th><th style="background:#e65100">Plan C - Cermat</th></tr>
+<tr><td><strong>Basis</strong></td><td>Syariah</td><td>Syariah</td><td>Konvensional</td></tr>
+<tr><td><strong>Usia Masuk</strong></td><td>18 - 70 tahun</td><td>30 Hari - 70 tahun</td><td>30 Hari - 70 tahun</td></tr>
+<tr><td><strong>Masa Perlindungan</strong></td><td>1, 5, 10 tahun</td><td>Sampai usia 110</td><td>15, 25, 35 tahun</td></tr>
+<tr><td><strong>Masa Bayar</strong></td><td>1, 5, 10 tahun</td><td>5, 10, 15 tahun</td><td>5, 10, 15 tahun</td></tr>
+<tr><td><strong>Manfaat Hidup/Pengembalian</strong></td><td>&#10060; Tidak Ada</td><td>&#9989; 120% (Usia Masuk 0-60) atau 30% (Usia Masuk 61-70)</td><td>&#9989; 100% Premi Kembali di Akhir Masa Asuransi</td></tr>
+</table>
+</div>
+</div>
+
+<!-- TAB 5: Tabel Premi -->
+<div class="tab-content" id="tab5">
+<div class="card">
+<h2>&#128203; Tabel Premi MPS Flexi (Quick Reference)</h2>
+<p>Berikut adalah contoh kontribusi/premi untuk Uang Pertanggungan (UP) <strong>Rp 1 Miliar</strong> dengan mata uang IDR. Premi disesuaikan dengan jenis kelamin, usia masuk, dan pilihan plan.</p>
+
+<div class="highlight-box">
+<strong>&#128161; Tips:</strong> Anda dapat menggunakan tab <strong>Kalkulator</strong> untuk simulasi yang lebih interaktif dan sesuai target kontribusi maupun Uang Pertanggungan Anda.
+</div>
+
+<h3>Contoh UP Rp 1 Miliar - Laki-Laki (IDR)</h3>
+<table>
+<tr>
+    <th>Usia</th>
+    <th>Amanah (Masa Bayar 5 Thn)</th>
+    <th>Berkah (Masa Bayar 10 Thn)</th>
+    <th>Cermat (Masa Bayar 5 Thn, Masa Asuransi 15 Thn)</th>
+</tr>
+<tr>
+    <td>30 Tahun</td>
+    <td>Rp 4.500.000 / thn</td>
+    <td>Rp 19.100.000 / thn</td>
+    <td>Rp 141.600.000 / thn</td>
+</tr>
+<tr>
+    <td>40 Tahun</td>
+    <td>Rp 7.400.000 / thn</td>
+    <td>Rp 26.500.000 / thn</td>
+    <td>Rp 144.100.000 / thn</td>
+</tr>
+</table>
+
+<h3>Contoh UP Rp 1 Miliar - Perempuan (IDR)</h3>
+<table>
+<tr>
+    <th>Usia</th>
+    <th>Amanah (Masa Bayar 5 Thn)</th>
+    <th>Berkah (Masa Bayar 10 Thn)</th>
+    <th>Cermat (Masa Bayar 5 Thn, Masa Asuransi 15 Thn)</th>
+</tr>
+<tr>
+    <td>30 Tahun</td>
+    <td>Rp 4.300.000 / thn</td>
+    <td>Rp 16.300.000 / thn</td>
+    <td>Rp 134.000.000 / thn</td>
+</tr>
+<tr>
+    <td>40 Tahun</td>
+    <td>Rp 6.300.000 / thn</td>
+    <td>Rp 21.000.000 / thn</td>
+    <td>Rp 136.200.000 / thn</td>
+</tr>
+</table>
+
+</div>
+</div>
+
+<!-- TAB 6: Kalkulator -->
+<div class="tab-content" id="tab6">
+<div class="calc-container">
+<h2 style="color:#00a758;margin-bottom:5px">&#129518; Kalkulator Premi MPS Flexi</h2>
+<p style="margin-bottom:20px;color:#666">Pilih parameter di bawah untuk melihat estimasi premi/kontribusi.</p>
+
+<div class="calc-row">
+<div class="calc-field">
+<label>&#128196; Plan</label>
+<select id="calc-plan" onchange="updateCalcUI();calculate()">
+<option value="A">Plan A - Amanah (Syariah, YRT/5/10)</option>
+<option value="B">Plan B - Berkah (Syariah)</option>
+<option value="C">Plan C - Cermat (Konvensional)</option>
+</select>
+</div>
+<div class="calc-field">
+<label>&#128100; Jenis Kelamin</label>
+<select id="calc-gender" onchange="calculate()">
+<option value="pria">Pria</option>
+<option value="wanita">Wanita</option>
+</select>
+</div>
+<div class="calc-field">
+<label>&#128197; Usia Masuk</label>
+<select id="calc-age" onchange="calculate()">
+<!-- Diisi oleh JS -->
+</select>
+</div>
+</div>
+
+<div class="calc-row">
+<div class="calc-field">
+<label>&#128178; Mata Uang</label>
+<select id="calc-currency" onchange="updateMinInfo();calculate()">
+<option value="IDR">IDR - Rupiah Indonesia</option>
+<option value="USD">USD - Dollar Amerika</option>
+</select>
+</div>
+<div class="calc-field" id="calc-method-container">
+<label>&#9881; Metode Penginputan (Khusus Amanah)</label>
+<select id="calc-method" onchange="updateMinInfo();calculate()">
+<option value="UP">Berdasarkan Santunan Asuransi (UP)</option>
+<option value="PREMI">Berdasarkan Kontribusi (Premi)</option>
+</select>
+</div>
+</div>
+
+<div class="calc-row">
+<div class="calc-field" id="field-up">
+<label>&#128176; <span id="label-nominal">Uang Pertanggungan (UP)</span></label>
+<input type="text" id="calc-input-nominal" value="1.000.000.000" onchange="formatInputNominal();calculate()" onkeyup="formatInputNominal();calculate()" inputmode="numeric">
+<small id="min-info" style="color:#888;font-size:.75rem">Minimum UP Rp 100.000.000</small>
+</div>
+
+<div class="calc-field">
+<label>&#128197; Masa Bayar (Tahun)</label>
+<select id="calc-masabayar" onchange="updateCalcUI();calculate()">
+</select>
+</div>
+<div class="calc-field">
+<label>&#128737; Masa Perlindungan (Tahun)</label>
+<select id="calc-masalindung" onchange="calculate()">
+</select>
+</div>
+<div class="calc-field">
+<label>&#128179; Mode Pembayaran</label>
+<select id="calc-payment-mode" onchange="calculate()">
+<option value="1">Tahunan</option>
+<option value="0.525">Semesteran</option>
+<option value="0.275">Kuartalan</option>
+<option value="0.095">Bulanan</option>
+</select>
+</div>
+</div>
+
+<div class="calc-result" id="calc-result">
+<h3>&#128200; Estimasi <span id="result-label">Premi/Kontribusi</span></h3>
+<div class="premium" id="calc-premium">Rp -</div>
+<div class="detail-line" id="calc-detail"></div>
+<div class="note" id="calc-note" style="margin-top:15px; color:#e53935; font-weight:600;"></div>
+<div class="note">* Ini adalah estimasi. Untuk ilustrasi resmi, silakan hubungi Financial Buddy Anda.</div>
+</div>
+</div>
+</div>
+
+<!-- TAB 7: Komisi (Password Protected) -->
+<div class="tab-content" id="tab7">
+<div class="card">
+<h2>&#128176; Struktur Komisi MPS Flexi</h2>
+
+<div class="password-overlay" id="komisi-lock">
+<h3>&#128274; Area Terkunci</h3>
+<p>Informasi ini hanya untuk agen/financial advisor Manulife. Masukkan password untuk melihat.</p>
+<input type="password" id="komisi-pwd" placeholder="Masukkan password" onkeypress="if(event.key==='Enter')checkKomisiPassword()">
+<button onclick="checkKomisiPassword()">Buka</button>
+<p class="error" id="komisi-error">&#10060; Password salah. Silakan coba lagi.</p>
+</div>
+
+<div class="komisi-content" id="komisi-content">
+<div class="info-box">
+<strong>&#9989; Akses diberikan.</strong> Berikut informasi komisi untuk agen MPS Flexi Manulife Indonesia.
+</div>
+
+<h3>Komisi Plan A - Amanah (YRT)</h3>
+<table>
+<tr><th>Tahun ke-</th><th>Komisi (%)</th><th>Keterangan</th></tr>
+<tr><td>1</td><td><strong>25%</strong></td><td>Tahun pertama tertinggi</td></tr>
+<tr><td>2+</td><td>5%</td><td>Renewal setiap tahun</td></tr>
+</table>
+
+<h3>Komisi Plan B - Berkah (15 Tahun)</h3>
+<table>
+<tr><th>Tahun ke-</th><th>Komisi (%)</th><th>Keterangan</th></tr>
+<tr><td>1</td><td><strong>30%</strong></td><td>Tahun pertama tertinggi</td></tr>
+<tr><td>2</td><td>10%</td><td>Tahun kedua</td></tr>
+<tr><td>3 s.d 5</td><td>5%</td><td>Tahun 3 sampai 5</td></tr>
+<tr><td>6+</td><td>2%</td><td>Tahun 6 sampai 15</td></tr>
+</table>
+
+<h3>Komisi Plan C - Cermat (5 Tahun Bayar)</h3>
+<table>
+<tr><th>Tahun ke-</th><th>Komisi (%)</th><th>Keterangan</th></tr>
+<tr><td>1</td><td><strong>20%</strong></td><td>Tahun pertama</td></tr>
+<tr><td>2</td><td>7.5%</td><td>Tahun kedua</td></tr>
+<tr><td>3 s.d 5</td><td>5%</td><td>Tahun 3 sampai 5</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<!-- TAB 8: Materi Training -->
+<div class="tab-content" id="tab8">
+<div class="card">
+<h2>&#128218; Materi Training & Sales Idea MPS Flexi</h2>
+<p>Kumpulan materi pembelajaran dan strategi penjualan untuk memaksimalkan potensi produk MPS Flexi.</p>
+</div>
+
+<div class="card">
+<h3 class="section-title">1. Target Segmen Nasabah & Rekomendasi Plan</h3>
+<ul>
+<li><strong>Perencanaan Warisan (Anti-Sengketa):</strong> Nasabah usia 50+ tahun yang ingin membagikan aset dengan adil. <br><em>Rekomendasi: Flexi Amanah, Flexi Berkah, Flexi Cermat.</em></li>
+<li><strong>Persiapan Dana Pensiun:</strong> Nasabah usia 35-40 tahun yang ingin masa pensiun tenang. <br><em>Rekomendasi: Flexi Berkah, Flexi Cermat (Term 15/25).</em></li>
+<li><strong>Akumulasi Kekayaan:</strong> Memindahkan portofolio deposito yang berisiko inflasi menjadi instrumen jangka panjang yang pasti. <br><em>Rekomendasi: Flexi Cermat.</em></li>
+<li><strong>Proteksi Dana Kuliah:</strong> Proyeksi uang kuliah di-cover oleh Santunan Asuransi. <br><em>Rekomendasi: Ketiga plan sesuai cash flow.</em></li>
+<li><strong>Proteksi Penghasilan & Utang:</strong> Menjaga operasional keluarga & bisnis jika pencari nafkah tutup usia. <br><em>Rekomendasi: Ketiga plan.</em></li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="section-title">2. Ketentuan Syariah & Alokasi</h3>
+<ul>
+<li><strong>Akad:</strong> Menggunakan akad <em>Wakalah Bil Ujrah</em> (kuasa pengelolaan dana dengan imbalan biaya) dan <em>Tabarru'</em> (hibah tolong-menolong).</li>
+<li><strong>Program Wakaf:</strong> Nasabah dapat mewakafkan maksimal <strong>45%</strong> dari total Santunan Asuransi untuk disalurkan ke lembaga Nadzir resmi.</li>
+<li><strong>Surplus Underwriting (Khusus Mata Uang IDR):</strong> Jika terjadi kelebihan dana Tabarru' setelah pembayaran klaim, akan dialokasikan: <strong>50%</strong> tetap di Dana Tabarru', <strong>30%</strong> dikembalikan ke Pemegang Polis (minimal Rp 50.000), dan <strong>20%</strong> untuk Pengelola (Manulife).</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="section-title">3. Program Potongan Kontribusi (Discount)</h3>
+<p>Berlaku bagi nasabah dengan premi tinggi (Tidak berlaku untuk Flexi Amanah dan Flexi Cermat dengan Masa Asuransi 15 tahun).</p>
+<div class="info-grid">
+<div class="info-item"><strong>&#128178; Diskon 10%</strong>Untuk premi IDR 12 Juta - 23,9 Juta <br>(atau USD 1.200 - 2.399)</div>
+<div class="info-item"><strong>&#128178; Diskon 20%</strong>Untuk premi IDR 24 Juta - 99,9 Juta <br>(atau USD 2.400 - 9.999)</div>
+<div class="info-item"><strong>&#128178; Diskon 25%</strong>Untuk premi IDR 100 Juta - 999 Juta <br>(atau USD 10.000 - 99.999)</div>
+<div class="info-item"><strong>&#128178; Diskon 30%</strong>Untuk premi di atas IDR 1 Miliar <br>(atau > USD 100.000)</div>
+</div>
+</div>
+
+<div class="card">
+<h3 class="section-title">4. Ketentuan Pengecualian Polis (Penting!)</h3>
+<p>Klaim <strong>tidak dibayarkan</strong> apabila meninggal dunia akibat:</p>
+<ol>
+<li>Bunuh diri dalam 2 tahun pertama sejak polis terbit/dipulihkan.</li>
+<li>Akibat melakukan tindak kejahatan atau dieksekusi hukuman mati.</li>
+<li>Perang, darurat militer, kerusuhan, pemogokan massal.</li>
+<li>Tugas kepolisian/kemiliteran aktif (kecuali ada premi tambahan khusus).</li>
+<li>Aktivitas penerbangan non-komersial/tidak berlisensi.</li>
+<li>Olahraga/Pekerjaan berbahaya (balap, menyelam, tinju) kecuali di-cover premi ekstra.</li>
+<li>Pengaruh alkohol, zat terlarang, atau narkotika.</li>
+</ol>
+</div>
+
+</div>
+
+<!-- TAB 9: FAQ -->
+<div class="tab-content" id="tab9">
+<div class="card">
+<h2>&#10067; FAQ - Pertanyaan yang Sering Diajukan</h2>
+
+<div class="faq-item" onclick="this.classList.toggle('open')">
+<div class="faq-q">Apa itu MPS Flexi? <span class="faq-arrow">&#9660;</span></div>
+<div class="faq-a">Manulife Protection Solution Flexi (MPS Flexi) adalah produk asuransi jiwa dwiguna yang memberikan fleksibilitas pilihan antara konsep Syariah (Amanah & Berkah) dan Konvensional (Cermat), di mana nasabah mendapatkan kepastian Santunan Asuransi saat tutup usia, dan opsi pengembalian kontribusi di masa hidup (untuk Berkah & Cermat).</div>
+</div>
+
+<div class="faq-item" onclick="this.classList.toggle('open')">
+<div class="faq-q">Kapan Manfaat Hidup / Pengembalian Premi dibayarkan? <span class="faq-arrow">&#9660;</span></div>
+<div class="faq-a">
+<strong>Flexi Berkah (Usia Masuk 0-60 thn):</strong> 20% premi dikembalikan di akhir tahun ke-20, dan 100% premi dikembalikan di akhir tahun ke-30 (Total 120%).<br>
+<strong>Flexi Berkah (Usia Masuk 61-70 thn):</strong> 30% premi dikembalikan di akhir tahun ke-15.<br>
+<strong>Flexi Cermat:</strong> 100% premi/UP dibayarkan sekaligus di Akhir Masa Asuransi (15/25/35 tahun).
+</div>
+</div>
+
+<div class="faq-item" onclick="this.classList.toggle('open')">
+<div class="faq-q">Apakah ada Masa Tunggu (Waiting Period)? <span class="faq-arrow">&#9660;</span></div>
+<div class="faq-a">Ya, terdapat masa tunggu <strong>2 tahun</strong> jika peserta meninggal karena penyakit/sakit, maupun bunuh diri. Jika meninggal akibat kecelakaan murni, maka tidak ada masa tunggu (Manfaat Langsung Cair).</div>
+</div>
+
+<div class="faq-item" onclick="this.classList.toggle('open')">
+<div class="faq-q">Bagaimana jika nasabah terlambat membayar premi? <span class="faq-arrow">&#9660;</span></div>
+<div class="faq-a">Nasabah memiliki <strong>Masa Tenggang (Grace Period) selama 30 hari</strong> sejak tanggal jatuh tempo. Selama periode 30 hari ini, polis masih dalam status aktif dan perlindungan tetap berjalan. Jika lewat dari 30 hari tidak dibayarkan, polis akan menjadi <em>Lapse</em> (batal).</div>
+</div>
+
+<div class="faq-item" onclick="this.classList.toggle('open')">
+<div class="faq-q">Berapa lama proses pembayaran Klaim Asuransi? <span class="faq-arrow">&#9660;</span></div>
+<div class="faq-a">Pembayaran Manfaat Asuransi akan dilakukan paling lambat dalam waktu <strong>30 (tiga puluh) hari kalender</strong> terhitung sejak klaim resmi disetujui oleh Manulife Indonesia dan seluruh kelengkapan dokumen telah diterima dengan sah.</div>
+</div>
+
+<div class="faq-item" onclick="this.classList.toggle('open')">
+<div class="faq-q">Apakah nasabah bisa membatalkan polis di awal (Free Look)? <span class="faq-arrow">&#9660;</span></div>
+<div class="faq-a">Ya. Tersedia <em>Free Look Period</em> selama <strong>14 hari</strong> sejak polis diterima. Nasabah dapat membatalkan polis tanpa denda/penalti, dan seluruh premi yang telah disetor akan dikembalikan penuh (dikurangi biaya medis bila sebelumnya ada permintaan cek kesehatan oleh Manulife).</div>
+</div>
+
+</div>
+</div>
+
+<!-- JavaScript -->
+<script>
+function showTab(index) {
+    var tabs = document.querySelectorAll('.tabs li');
+    var contents = document.querySelectorAll('.tab-content');
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('active');
+        if (contents[i]) contents[i].classList.remove('active');
+    }
+    tabs[index].classList.add('active');
+    if (contents[index]) contents[index].classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function checkKomisiPassword() {
+    var pwd = document.getElementById('komisi-pwd').value;
+    if(pwd === 'manulife') {
+        document.getElementById('komisi-lock').style.display = 'none';
+        document.getElementById('komisi-content').style.display = 'block';
+    } else {
+        document.getElementById('komisi-error').style.display = 'block';
+    }
+}
+
+window.onload = function() {
+    let ageSelect = document.getElementById('calc-age');
+    for(let i=0; i<=70; i++){
+        let opt = document.createElement('option');
+        opt.value = i;
+        opt.text = i + " Tahun";
+        if(i===30) opt.selected = true; 
+        ageSelect.appendChild(opt);
+    }
+    updateCalcUI();
+    calculate();
+};
+
+function formatInputNominal() {
+    let input = document.getElementById('calc-input-nominal');
+    let val = input.value.replace(/\D/g, '');
+    if(val) {
+        input.value = parseFloat(val).toLocaleString('id-ID');
+    }
+}
+
+function updateCalcUI() {
+    const plan = document.getElementById('calc-plan').value;
+    const mb = document.getElementById('calc-masabayar');
+    const ml = document.getElementById('calc-masalindung');
+    const methodContainer = document.getElementById('calc-method-container');
+    const currMb = mb.value;
+    const currMl = ml.value;
+    
+    mb.onchange = null;
+    
+    if (plan === 'A') {
+        methodContainer.style.display = 'block';
+        // PERBAIKAN: Default otomatis terpilih 5 Tahun agar cocok dengan JSON perdana Anda
+        mb.innerHTML = '<option value="5">5 Tahun</option><option value="1">1 Tahun (YRT)</option><option value="10">10 Tahun</option>';
+        ml.innerHTML = '<option value="sama">Sama dengan masa bayar</option>';
+        ml.disabled = true;
+        mb.onchange = calculate;
+    } else if (plan === 'B') {
+        methodContainer.style.display = 'none';
+        document.getElementById('calc-method').value = 'UP';
+        // PERBAIKAN: Default otomatis terpilih 10 Tahun agar cocok dengan JSON Plan B Anda
+        mb.innerHTML = '<option value="10">10 Tahun</option><option value="5">5 Tahun</option><option value="15">15 Tahun</option>';
+        ml.innerHTML = '<option value="110">Sampai Usia 110 Tahun</option>';
+        ml.disabled = true;
+        mb.onchange = calculate;
+    } else if (plan === 'C') {
+        methodContainer.style.display = 'none';
+        document.getElementById('calc-method').value = 'UP';
+        mb.innerHTML = '<option value="5">5 Tahun</option><option value="10">10 Tahun</option><option value="15">15 Tahun</option>';
+        ml.disabled = false;
+        
+        ml.innerHTML = '';
+        if (currMb === '5' || currMb === '10' || (!currMb)) {
+            ml.innerHTML += '<option value="15">15 Tahun</option>';
+        }
+        ml.innerHTML += '<option value="25">25 Tahun</option><option value="35">35 Tahun</option>';
+        
+        mb.onchange = () => { updateCalcUI(); calculate(); };
+    }
+    
+    if(currMb && [...mb.options].some(o => o.value === currMb)) mb.value = currMb;
+    if(currMl && [...ml.options].some(o => o.value === currMl)) ml.value = currMl;
+    
+    updateMinInfo();
+}
+
+function updateMinInfo() {
+    const currency = document.getElementById('calc-currency').value;
+    const method = document.getElementById('calc-method').value;
+    const info = document.getElementById('min-info');
+    const label = document.getElementById('label-nominal');
+    
+    if (method === 'UP') {
+        label.innerText = 'Uang Pertanggungan (UP)';
+        info.innerText = currency === 'IDR' ? 'Minimum UP Rp 100.000.000' : 'Minimum UP USD 10.000';
+    } else {
+        label.innerText = 'Target Kontribusi/Premi Tahunan';
+        info.innerText = currency === 'IDR' ? 'Minimum Kontribusi Rp 4.000.000' : 'Minimum Kontribusi USD 400';
+    }
+}
+
+// --------------------------------------------------------
+// DATABASE PREMI JSON
+const dataPremiJSON = [
+  {
+    "plan": "A",
+    "gender": "pria",
+    "curr": "IDR",
+    "age": 30,
+    "mb": 5,
+    "ml": 5,
+    "rate": 4500000
+  },
+  {
+    "plan": "B",
+    "gender": "pria",
+    "curr": "IDR",
+    "age": 30,
+    "mb": 10,
+    "ml": 110,
+    "rate": 19100000
+  },
+  {
+    "plan": "C",
+    "gender": "pria",
+    "curr": "IDR",
+    "age": 30,
+    "mb": 5,
+    "ml": 15,
+    "rate": 141600000
+  },
+  {
+    "plan": "A",
+    "gender": "wanita",
+    "curr": "USD",
+    "age": 37,
+    "mb": 5,
+    "ml": 5,
+    "rate": 2820
+  }
+];
+
+function getBaseRate(plan, gender, curr, age, mb, ml) {
+    const searchPlan = String(plan).toUpperCase();
+    const searchGender = String(gender).toLowerCase();
+    const searchCurr = String(curr).toUpperCase();
+    const searchAge = parseInt(age);
+    const searchMb = parseInt(mb);
+    
+    const targetMl = (searchPlan === 'B') ? 110 : parseInt(ml);
+
+    const found = dataPremiJSON.find(d => 
+        String(d.plan).toUpperCase() === searchPlan && 
+        String(d.gender).toLowerCase() === searchGender && 
+        String(d.curr).toUpperCase() === searchCurr && 
+        parseInt(d.age) === searchAge && 
+        parseInt(d.mb) === searchMb && 
+        parseInt(d.ml) === targetMl
+    );
+    
+    return found ? parseFloat(found.rate) : null; 
+}
+// --------------------------------------------------------
+
+function calculate() {
+    const plan = document.getElementById('calc-plan').value;
+    const gender = document.getElementById('calc-gender').value;
+    const age = parseInt(document.getElementById('calc-age').value);
+    const currency = document.getElementById('calc-currency').value;
+    const method = document.getElementById('calc-method').value;
+    const mb = parseInt(document.getElementById('calc-masabayar').value);
+    const mlSelect = document.getElementById('calc-masalindung').value;
+    const paymentMode = parseFloat(document.getElementById('calc-payment-mode').value);
+    
+    let ml = mlSelect === 'sama' ? mb : parseInt(mlSelect);
+    let rawInput = document.getElementById('calc-input-nominal').value.replace(/\D/g, '');
+    let nominal = parseFloat(rawInput) || 0;
+    
+    const minUP = currency === 'IDR' ? 100000000 : 10000;
+    const actualMinPremi = currency === 'IDR' ? (plan === 'A' ? 4000000 : 5000000) : (plan === 'A' ? 400 : 500);
+    
+    let ratePerMiliar = getBaseRate(plan, gender, currency, age, mb, ml);
+    
+    // PERBAIKAN TAMPILAN ERROR: Info spesifik jika JSON belum ada datanya
+    if (!ratePerMiliar) {
+        document.getElementById('result-label').innerText = 'Status Kalkulasi';
+        document.getElementById('calc-premium').innerHTML = '<span style="color:#e53935; font-size:1.5rem;">DATA BELUM ADA</span>';
+        document.getElementById('calc-detail').innerHTML = `<span style="color:#555;">Tabel Premi untuk <strong>Plan ${plan}, ${gender.toUpperCase()}, Usia ${age} Tahun, Masa Bayar ${mb} Tahun, Masa Lindung ${ml} Tahun (${currency})</strong> belum Anda masukkan ke dalam data JSON.</span>`;
+        document.getElementById('calc-note').innerHTML = "";
+        return;
+    }
+    
+    let resultPremiTahunan = 0;
+    let resultUP = 0;
+    
+    if (method === 'UP') {
+        resultUP = nominal;
+        let factor = currency === 'IDR' ? (resultUP / 1000000000) : (resultUP / 100000); 
+        let baseTahunan = ratePerMiliar * factor;
+        
+        let discount = 0;
+        if (!(plan === 'A' || (plan === 'C' && ml === 15))) {
+            if (currency === 'IDR') {
+                if (baseTahunan >= 1000000000) discount = 0.30;
+                else if (baseTahunan >= 100000000) discount = 0.25;
+                else if (baseTahunan >= 24000000) discount = 0.20;
+                else if (baseTahunan >= 12000000) discount = 0.10;
+            } else { 
+                if (baseTahunan >= 100000) discount = 0.30;
+                else if (baseTahunan >= 10000) discount = 0.25;
+                else if (baseTahunan >= 2400) discount = 0.20;
+                else if (baseTahunan >= 1200) discount = 0.10;
+            }
+        }
+        resultPremiTahunan = Math.round(baseTahunan * (1 - discount));
+        
+    } else {
+        resultPremiTahunan = nominal;
+        let factor = resultPremiTahunan / ratePerMiliar;
+        resultUP = Math.round(factor * (currency === 'IDR' ? 1000000000 : 100000));
+    }
+    
+    let finalPremi = Math.round(resultPremiTahunan * paymentMode);
+    
+    let warningText = "";
+    if (resultPremiTahunan < actualMinPremi) {
+        warningText += `&#9888; Peringatan: Premi tahunan (${currency === 'IDR' ? 'Rp '+resultPremiTahunan.toLocaleString('id-ID') : resultPremiTahunan+' USD'}) di bawah limit.<br>`;
+    }
+    if (resultUP < minUP) {
+        warningText += `&#9888; Peringatan: Santunan (UP) di bawah minimum (${currency === 'IDR' ? 'Rp '+minUP.toLocaleString('id-ID') : minUP+' USD'}).<br>`;
+    }
+    
+    let currSymbol = currency === 'IDR' ? 'Rp ' : '$ ';
+    if (method === 'UP') {
+        document.getElementById('result-label').innerText = 'Premi/Kontribusi';
+        document.getElementById('calc-premium').innerHTML = currSymbol + finalPremi.toLocaleString('id-ID');
+    } else {
+        document.getElementById('result-label').innerText = 'Santunan Asuransi (UP)';
+        document.getElementById('calc-premium').innerHTML = currSymbol + resultUP.toLocaleString('id-ID');
+    }
+    
+    let modeText = "Tahunan";
+    if(paymentMode === 0.525) modeText = "Semesteran";
+    if(paymentMode === 0.275) modeText = "Kuartalan";
+    if(paymentMode === 0.095) modeText = "Bulanan";
+    
+    let strML = plan === 'B' ? 'Hingga Usia 110' : ml + ' Tahun';
+    
+    document.getElementById('calc-detail').innerHTML = `
+        <strong>Profil:</strong> ${gender.toUpperCase()}, ${age} Tahun | <strong>Plan:</strong> ${plan}<br>
+        <strong>Masa Bayar:</strong> ${mb} Tahun | <strong>Masa Perlindungan:</strong> ${strML}<br>
+        <strong>Pembayaran ${modeText}:</strong> ${currSymbol} ${finalPremi.toLocaleString('id-ID')} / periode.<br>
+        <strong>Asumsi UP Terbentuk:</strong> ${currSymbol} ${resultUP.toLocaleString('id-ID')}
+    `;
+    
+    document.getElementById('calc-note').innerHTML = warningText;
+}
+</script>
+</body>
+</html>
