@@ -300,14 +300,60 @@ function updateCalcUI(){
     mbSel.innerHTML='<option value="5_15">MB 5 / ML 15</option><option value="10_15">MB 10 / ML 15</option><option value="5_25">MB 5 / ML 25</option><option value="10_25">MB 10 / ML 25</option><option value="15_25">MB 15 / ML 25</option><option value="5_35">MB 5 / ML 35</option><option value="10_35">MB 10 / ML 35</option><option value="15_35">MB 15 / ML 35</option>';
   }
   
-  // Update UP dropdown
+  // Update UP dropdown (dynamically filtered by available data)
   var upSel=document.getElementById('calcUP');
   var labels=(currency==='IDR')?IDR_UP_LABELS:USD_UP_LABELS;
   var keys=(currency==='IDR')?IDR_UP_KEYS:USD_UP_KEYS;
-  upSel.innerHTML='<option value="">-- Pilih '+getTermUP(plan)+' --</option>';
-  for(var i=0;i<keys.length;i++){
-    upSel.innerHTML+='<option value="'+keys[i]+'">'+labels[keys[i]]+'</option>';
+  var prevUP=upSel.value;
+  var filteredKeys=keys;
+  // Try to resolve current data to filter UP options
+  var gender=document.getElementById('calcGender').value;
+  var age=parseInt(document.getElementById('calcAge').value);
+  var masaBayar=document.getElementById('calcMasaBayar').value;
+  if(plan&&currency&&gender&&masaBayar&&!isNaN(age)){
+    var pD=PREMI_DATA[plan];
+    if(pD&&pD[currency]&&pD[currency][gender]){
+      var gD=pD[currency][gender];
+      var ageData=null;
+      if(gD[age]){
+        ageData=gD[age];
+      } else {
+        var avAges=Object.keys(gD).map(Number).sort(function(a,b){return a-b});
+        var lower=null,upper=null;
+        for(var ai=0;ai<avAges.length;ai++){
+          if(avAges[ai]<=age) lower=avAges[ai];
+          if(avAges[ai]>=age&&upper===null) upper=avAges[ai];
+        }
+        if(lower!==null&&upper!==null&&lower!==upper){
+          var lD=gD[lower],uD=gD[upper];
+          if(lD[masaBayar]&&uD[masaBayar]){
+            ageData={};ageData[masaBayar]={};
+            var lKeys=Object.keys(lD[masaBayar]);
+            for(var li=0;li<lKeys.length;li++){
+              if(uD[masaBayar][lKeys[li]]!==undefined) ageData[masaBayar][lKeys[li]]=true;
+            }
+          }
+        } else if(lower!==null){
+          ageData=gD[lower];
+        } else if(upper!==null){
+          ageData=gD[upper];
+        }
+      }
+      if(ageData&&ageData[masaBayar]){
+        var availUPs=Object.keys(ageData[masaBayar]);
+        filteredKeys=[];
+        for(var fi=0;fi<keys.length;fi++){
+          if(availUPs.indexOf(String(keys[fi]))!==-1) filteredKeys.push(keys[fi]);
+        }
+        if(filteredKeys.length===0) filteredKeys=keys;
+      }
+    }
   }
+  upSel.innerHTML='<option value="">-- Pilih '+getTermUP(plan)+' --</option>';
+  for(var i=0;i<filteredKeys.length;i++){
+    upSel.innerHTML+='<option value="'+filteredKeys[i]+'">'+labels[filteredKeys[i]]+'</option>';
+  }
+  if(prevUP){upSel.value=prevUP;}
   
   // Show/hide UP vs Target
   document.getElementById('calcUPRow').style.display=(mode==='up')?'':'none';
@@ -612,7 +658,11 @@ Hubungi via WhatsApp
 <button onclick="showTabelPremi('C','IDR','pria');activateBtn(this)">Cermat IDR Pria</button>
 <button onclick="showTabelPremi('C','IDR','wanita');activateBtn(this)">Cermat IDR Wanita</button>
 <button onclick="showTabelPremi('C','USD','pria');activateBtn(this)">Cermat USD Pria</button>
+<button onclick="showTabelPremi('C','USD','wanita');activateBtn(this)">Cermat USD Wanita</button>
+<button onclick="showTabelPremi('A','IDR','pria');activateBtn(this)">Amanah IDR Pria</button>
+<button onclick="showTabelPremi('A','IDR','wanita');activateBtn(this)">Amanah IDR Wanita</button>
 <button onclick="showTabelPremi('A','USD','pria');activateBtn(this)">Amanah USD Pria</button>
+<button onclick="showTabelPremi('A','USD','wanita');activateBtn(this)">Amanah USD Wanita</button>
 </div>
 <div id="tabelPremiContent"></div>
 <script>
@@ -637,7 +687,7 @@ document.addEventListener('DOMContentLoaded',function(){showTabelPremi('B','IDR'
 </div>
 <div class="calc-field">
 <label>Jenis Kelamin</label>
-<select id="calcGender" onchange="calcUpdate()">
+<select id="calcGender" onchange="updateCalcUI()">
 <option value="pria">Pria</option>
 <option value="wanita">Wanita</option>
 </select>
@@ -646,7 +696,7 @@ document.addEventListener('DOMContentLoaded',function(){showTabelPremi('B','IDR'
 <div class="calc-row">
 <div class="calc-field">
 <label>Usia Peserta/Nasabah (tahun)</label>
-<input type="number" id="calcAge" min="0" max="70" value="30" onchange="calcUpdate()" oninput="calcUpdate()">
+<input type="number" id="calcAge" min="0" max="70" value="30" onchange="updateCalcUI()" oninput="updateCalcUI()">
 </div>
 <div class="calc-field">
 <label>Mata Uang</label>
@@ -659,7 +709,7 @@ document.addEventListener('DOMContentLoaded',function(){showTabelPremi('B','IDR'
 <div class="calc-row">
 <div class="calc-field">
 <label>Masa Bayar</label>
-<select id="calcMasaBayar" onchange="calcUpdate()">
+<select id="calcMasaBayar" onchange="updateCalcUI()">
 <option value="5">5 Tahun</option>
 <option value="10">10 Tahun</option>
 <option value="15">15 Tahun</option>
