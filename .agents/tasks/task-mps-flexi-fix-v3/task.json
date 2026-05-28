@@ -1,0 +1,14 @@
+{
+  "task_id": "task-mps-flexi-fix-v3",
+  "task_description": "Fix the MPS Flexi HTML calculator to use actual non-linear rates from the JSON (absolute kontribusi per UP level), standardize Syariah terminology (Uang Santunan, Kontribusi, Peserta for Plan A & B), implement berdasar kontribusi mode showing estimated Uang Santunan, and add floating WhatsApp icon.",
+  "status": "completed",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null,
+  "verification": {
+    "build": "pass",
+    "tests": "pass",
+    "test_quality": "pass",
+    "docker_build": "skipped",
+    "summary": "All 20 verification checks pass. HTML well-formed (83 divs balanced). PREMI_DATA contains non-linear absolute kontribusi values keyed by UP level. Syariah terminology correctly used for Plan A/B (Uang Santunan, Kontribusi, Peserta) and conventional terms for Plan C (UP, Premi, Nasabah). Dynamic term switching via getTermUP/getTermPremi/getTermNasabah functions. Floating WA icon at bottom-right with correct link. Calculator supports both 'berdasar UP' (dropdown of 10 levels) and 'berdasar kontribusi' (interpolation) modes. Age interpolation for missing ages. File size 717KB (342KB excluding komisi base64 image)."
+  }
+}

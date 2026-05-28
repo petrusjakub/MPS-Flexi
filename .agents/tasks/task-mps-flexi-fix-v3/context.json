@@ -1,0 +1,19 @@
+{
+  "project_type": "Single-page HTML application with inline CSS/JS and embedded data",
+  "language": "HTML/CSS/JavaScript",
+  "build_system": "None - single self-contained HTML file",
+  "test_framework": "None - manual/visual testing only",
+  "build_command": "N/A",
+  "test_command": "python3 -c \"import json; f=open('MPS_Flexi_Product.html'); c=f.read(); f.close(); print('HTML size:', len(c)); assert '<html' in c; assert '</html>' in c; print('PASS')\"",
+  "verification_instructions": "1. Check HTML is well-formed. 2. Verify PREMI_DATA contains non-linear absolute rates per UP level. 3. Verify Syariah terminology is used for Plan A & B. 4. Verify floating WA icon exists. 5. Verify calculator handles both input modes correctly.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup needed - standalone HTML file",
+  "environment_constraints": "No build tools needed. File must remain self-contained (inline CSS, inline JS, no external deps except exchange rate API).",
+  "contribution_requirements": "File must be a single HTML file with all resources inline.",
+  "key_patterns": "Existing file is 1582 lines with: inline CSS styles, tab-based navigation, embedded PREMI_DATA JS object containing premium rates from Data_Premi_MPS_Clean.json, calculator with plan/gender/age/currency/masa-bayar selectors, password-protected commission tab with base64 image, FAQ section with accordion.",
+  "relevant_files": [
+    "MPS_Flexi_Product.html",
+    "Data_Premi_MPS_Clean.json"
+  ],
+  "directory_structure": "Flat structure - all files in /projects/sandbox/MPS-Flexi/"
+}
