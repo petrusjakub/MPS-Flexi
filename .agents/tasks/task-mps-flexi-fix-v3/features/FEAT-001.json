@@ -2,7 +2,7 @@
   "id": "FEAT-001",
   "type": "fix",
   "description": "Complete rewrite of MPS_Flexi_Product.html to fix the calculator logic (non-linear rates with absolute kontribusi per UP level), standardize Syariah terminology, implement 'berdasar kontribusi' mode showing estimated Uang Santunan, and add floating WhatsApp icon.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Step 1: Parse Data_Premi_MPS_Clean.json and build a complete PREMI_DATA structure that stores ABSOLUTE kontribusi values for each UP level (not per-unit rates). The structure should be: PREMI_DATA[plan][currency][gender][age][masaBayar] = {upLevel1: kontribusi1, upLevel2: kontribusi2, ...}. IDR UP levels: [1000000000, 1500000000, 2000000000, 2500000000, 3000000000, 3500000000, 5000000000, 7500000000, 10000000000, 50000000000]. USD UP levels: [100000, 150000, 200000, 250000, 300000, 350000, 500000, 750000, 1000000, 5000000]. IDR values in the JSON are in Juta (millions), so multiply by 1,000,000 for actual Rupiah. USD values are already in USD. Ages in JSON: 0-30, 39, 65-70. Block pattern per age: 4 blocks of 17 rows (IDR Pria, USD Pria, IDR Wanita, USD Wanita). Data starts at row index 76. Amanah data only has meaningful values for age 39 (USD only) and ages 65-70 (USD only); all other ages show dashes.",
     "Step 2: Rewrite the calculator UI to use dropdown selection of available UP levels instead of free-text UP input (since rates are non-linear and discrete). The UP dropdown should show the 10 available levels formatted nicely (e.g., 'Rp 1 Miliar', 'Rp 1,5 Miliar', ..., 'Rp 50 Miliar' for IDR; 'USD 100,000', 'USD 150,000', ..., 'USD 5,000,000' for USD). The calculator should look up the exact kontribusi from the data for the selected UP level, age, gender, plan, and masa bayar. For ages not in the data (31-64 for most plans), interpolate between the two nearest available ages.",
@@ -32,5 +32,5 @@
     "Check file size is reasonable"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "Data structure: 135 blocks of 17 rows starting at row 76. Ages 0-30 have 4 blocks (IDR Pria, USD Pria, IDR Wanita, USD Wanita) except age 7 (missing USD Pria) and age 15 (missing IDR Wanita). Ages 65-70 have 2 USD blocks each (Pria + Wanita). Age 39 has 1 USD Pria block only. Plan A data only exists for USD (ages 18-30, 39, 65-70). Total HTML size is 717KB including 375KB base64 komisi image (342KB without image)."
 }
