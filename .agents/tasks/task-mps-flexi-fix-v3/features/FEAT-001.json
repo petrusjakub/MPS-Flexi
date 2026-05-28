@@ -1,0 +1,36 @@
+{
+  "id": "FEAT-001",
+  "type": "fix",
+  "description": "Complete rewrite of MPS_Flexi_Product.html to fix the calculator logic (non-linear rates with absolute kontribusi per UP level), standardize Syariah terminology, implement 'berdasar kontribusi' mode showing estimated Uang Santunan, and add floating WhatsApp icon.",
+  "status": "in_progress",
+  "steps": [
+    "Step 1: Parse Data_Premi_MPS_Clean.json and build a complete PREMI_DATA structure that stores ABSOLUTE kontribusi values for each UP level (not per-unit rates). The structure should be: PREMI_DATA[plan][currency][gender][age][masaBayar] = {upLevel1: kontribusi1, upLevel2: kontribusi2, ...}. IDR UP levels: [1000000000, 1500000000, 2000000000, 2500000000, 3000000000, 3500000000, 5000000000, 7500000000, 10000000000, 50000000000]. USD UP levels: [100000, 150000, 200000, 250000, 300000, 350000, 500000, 750000, 1000000, 5000000]. IDR values in the JSON are in Juta (millions), so multiply by 1,000,000 for actual Rupiah. USD values are already in USD. Ages in JSON: 0-30, 39, 65-70. Block pattern per age: 4 blocks of 17 rows (IDR Pria, USD Pria, IDR Wanita, USD Wanita). Data starts at row index 76. Amanah data only has meaningful values for age 39 (USD only) and ages 65-70 (USD only); all other ages show dashes.",
+    "Step 2: Rewrite the calculator UI to use dropdown selection of available UP levels instead of free-text UP input (since rates are non-linear and discrete). The UP dropdown should show the 10 available levels formatted nicely (e.g., 'Rp 1 Miliar', 'Rp 1,5 Miliar', ..., 'Rp 50 Miliar' for IDR; 'USD 100,000', 'USD 150,000', ..., 'USD 5,000,000' for USD). The calculator should look up the exact kontribusi from the data for the selected UP level, age, gender, plan, and masa bayar. For ages not in the data (31-64 for most plans), interpolate between the two nearest available ages.",
+    "Step 3: Implement the 'berdasar kontribusi' mode. When user inputs a target kontribusi amount, the calculator should find the closest matching UP level(s) from the available data. For each available UP level, show the kontribusi needed. Present results as: 'Dengan kontribusi Rp X /tahun, estimasi Uang Santunan (Plan A/B) atau UP (Plan C) yang didapat: Rp Y'. If the input kontribusi falls between two UP levels, interpolate to estimate the UP amount.",
+    "Step 4: Standardize Syariah terminology throughout the HTML for Plan A (Amanah) and Plan B (Berkah): Replace 'Uang Pertanggungan' / 'UP' with 'Uang Santunan' in all Plan A and B contexts. Replace 'Premi' with 'Kontribusi' in Plan A and B contexts. Replace 'Nasabah' with 'Peserta' in Plan A and B contexts. For Plan C (Cermat/Konvensional), keep 'Premi', 'UP'/'Uang Pertanggungan', 'Nasabah'. In shared/comparison sections, use dual terminology like 'Kontribusi/Premi' or contextually switch based on plan. The calculator result label should dynamically show 'Estimasi Kontribusi' or 'Estimasi Premi' based on selected plan, and 'Uang Santunan' or 'UP' based on plan.",
+    "Step 5: Add a floating WhatsApp icon button fixed at the bottom-right corner of all pages. Style: green circle (#25D366 background), white WA SVG icon inside, fixed position bottom:20px right:20px, z-index:9999, with subtle shadow and hover scale effect. Link to https://wa.me/6287781896087. This should be visible on ALL tabs regardless of scroll position. Keep the existing sticky banner at the top as well.",
+    "Step 6: Fix the Tabel Premi tab (tab 5) to show actual data from the JSON instead of linearly extrapolated values. Show a proper table with multiple UP levels as columns, ages as rows. Add note that rates are absolute (not per-unit). Show both IDR and USD sections.",
+    "Step 7: Update the Plan A tab illustrations and Plan B tab illustrations to match the actual JSON data values. Remove any hardcoded illustrative numbers that contradict the JSON. For Plan A, note that IDR data shows all dashes (no data available in JSON for IDR Plan A), only USD data exists for ages 39 and 65-70. Adjust the content accordingly - perhaps show USD-based illustrations or note that Plan A rates are quoted on request.",
+    "Step 8: Ensure all page footer-wa sections and the main WA banner link to https://wa.me/6287781896087 consistently."
+  ],
+  "acceptance_criteria": [
+    "PREMI_DATA in the HTML contains absolute kontribusi values per UP level (non-linear, discrete levels) extracted correctly from Data_Premi_MPS_Clean.json",
+    "Calculator dropdown shows 10 discrete UP levels appropriate to the selected currency (IDR or USD)",
+    "Calculator correctly looks up kontribusi for selected combination and displays it",
+    "For ages not in the JSON (31-38, 40-64), calculator interpolates between nearest available ages",
+    "Mode 'berdasar kontribusi' allows user to input target kontribusi and shows estimated Uang Santunan / UP",
+    "Plan A and B pages consistently use Syariah terms: Uang Santunan, Kontribusi, Peserta",
+    "Plan C page uses conventional terms: UP/Uang Pertanggungan, Premi, Nasabah",
+    "Floating WA icon is visible at bottom-right on all tabs with link to https://wa.me/6287781896087",
+    "HTML file is self-contained (no external dependencies except exchange rate API fetch)",
+    "File remains a single HTML file under 300KB (excluding the commission image base64)"
+  ],
+  "verification": [
+    "Run python3 to validate HTML structure and verify PREMI_DATA contains non-linear data",
+    "Grep for 'Uang Santunan' to confirm Syariah terminology is present",
+    "Grep for floating WA icon CSS (position:fixed, bottom, right)",
+    "Check file size is reasonable"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
