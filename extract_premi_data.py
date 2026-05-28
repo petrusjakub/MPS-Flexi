@@ -16,7 +16,7 @@ def parse_rate(value, currency):
         return None
     if currency == 'IDR':
         # Value is in Juta (millions), e.g. "17.2" -> 17200000
-        return int(float(value) * 1_000_000)
+        return round(float(value) * 1_000_000)
     else:
         # USD: remove commas, parse as int, e.g. "7,258" -> 7258
         return int(value.replace(',', ''))
@@ -180,10 +180,16 @@ def main():
     new_code = f"""// Data Premi MPS Flexi - Extracted from Data_Premi_MPS_Clean.json
 const dataPremiJSON = {js_entries};
 
+const premiumMap = {{}};
+dataPremiJSON.forEach(d => {{
+    premiumMap[d.plan + '|' + d.gender + '|' + d.age + '|' + d.mb + '|' + d.ml + '|' + d.curr] = d.rate;
+}});
+
 function getBaseRate(plan, gender, age, mb, ml) {{
     const currency = document.getElementById('calc-currency').value;
-    const entry = dataPremiJSON.find(d => d.plan === plan && d.gender === gender && d.age === age && d.mb === mb && d.ml === ml && d.curr === currency);
-    return entry ? entry.rate : null;
+    const key = plan + '|' + gender + '|' + age + '|' + mb + '|' + ml + '|' + currency;
+    const rate = premiumMap[key];
+    return rate !== undefined ? rate : null;
 }}"""
 
     # Read the HTML file
@@ -191,9 +197,13 @@ function getBaseRate(plan, gender, age, mb, ml) {{
         html = f.read()
 
     # Replace the getBaseRate section
-    # Pattern: from "// Database Mockup" comment through closing brace of getBaseRate
-    pattern = r'// Database Mockup Spesifik.*?return 10000000; // Dummy Base Rate\n\}'
+    # Try new format first (already converted), then old format
+    pattern = r'// Data Premi MPS Flexi - Extracted from Data_Premi_MPS_Clean\.json\nconst dataPremiJSON = \[.*?\];\n+(?:const premiumMap = \{\};\ndataPremiJSON\.forEach\(d => \{[^}]+\}\);\n+)?function getBaseRate\(plan, gender, age, mb, ml\) \{[^}]+\}'
     match = re.search(pattern, html, re.DOTALL)
+    if not match:
+        # Try old format
+        pattern = r'// Database Mockup Spesifik.*?return 10000000; // Dummy Base Rate\n\}'
+        match = re.search(pattern, html, re.DOTALL)
     if not match:
         print("ERROR: Could not find getBaseRate section to replace!")
         return
@@ -201,7 +211,7 @@ function getBaseRate(plan, gender, age, mb, ml) {{
     html = html[:match.start()] + new_code + html[match.end():]
     print("Replaced getBaseRate section successfully.")
 
-    # Add null check in calculate() function after ratePerMiliar assignment
+    # Add null check in calculate() function after ratePerMiliar assignment (if not already present)
     null_check = """    let ratePerMiliar = getBaseRate(plan, gender, age, mb, ml);
 
     if (ratePerMiliar === null) {
@@ -212,12 +222,16 @@ function getBaseRate(plan, gender, age, mb, ml) {{
         return;
     }"""
 
-    old_rate_line = "    let ratePerMiliar = getBaseRate(plan, gender, age, mb, ml);"
-    if old_rate_line in html:
-        html = html.replace(old_rate_line, null_check, 1)
-        print("Added null check for ratePerMiliar.")
+    # Check if null check already exists
+    if 'if (ratePerMiliar === null)' in html:
+        print("Null check already present, skipping.")
     else:
-        print("WARNING: Could not find ratePerMiliar line to add null check!")
+        old_rate_line = "    let ratePerMiliar = getBaseRate(plan, gender, age, mb, ml);"
+        if old_rate_line in html:
+            html = html.replace(old_rate_line, null_check, 1)
+            print("Added null check for ratePerMiliar.")
+        else:
+            print("WARNING: Could not find ratePerMiliar line to add null check!")
 
     # Write the updated HTML back
     with open('/projects/sandbox/MPS-Flexi/MPS_Flexi_Updated.html', 'w', encoding='utf-8') as f:
