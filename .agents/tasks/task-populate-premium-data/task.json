@@ -1,0 +1,7 @@
+{
+  "task_id": "task-populate-premium-data",
+  "task_description": "Fix MPS_Flexi_Updated.html calculator by populating complete premium data from Data_Premi_MPS_Clean.xlsx. Extract all 135 blocks of premium data, generate a dataPremiJSON array, and replace the hardcoded getBaseRate function with a data-driven lookup.",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001", "FEAT-002"],
+  "blocked_reason": null
+}

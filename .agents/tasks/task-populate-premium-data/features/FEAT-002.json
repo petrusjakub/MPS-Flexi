@@ -1,0 +1,23 @@
+{
+  "id": "FEAT-002",
+  "type": "chore",
+  "description": "Create a new git branch, commit the updated MPS_Flexi_Updated.html with the complete premium data, and the extraction script.",
+  "status": "pending",
+  "steps": [
+    "Step 1: Create a new branch named 'feat/populate-premium-data' from main.",
+    "Step 2: Stage MPS_Flexi_Updated.html and extract_premi_data.py.",
+    "Step 3: Commit with message: feat: populate MPS_Flexi_Updated.html with complete premium data from xlsx"
+  ],
+  "acceptance_criteria": [
+    "A new branch 'feat/populate-premium-data' exists with the commit",
+    "The commit contains the updated HTML and the extraction script",
+    "The commit message matches the required format"
+  ],
+  "verification": [
+    "Run: git -C /projects/sandbox/MPS-Flexi log --oneline -1 to verify commit message",
+    "Run: git -C /projects/sandbox/MPS-Flexi branch to verify branch name",
+    "Run: git -C /projects/sandbox/MPS-Flexi diff --stat HEAD~1 to verify changed files"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

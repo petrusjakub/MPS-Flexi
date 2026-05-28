@@ -1,0 +1,20 @@
+{
+  "project_type": "Static HTML calculator with embedded JavaScript, data from xlsx file",
+  "language": "HTML/JavaScript (frontend), Python (for data extraction script)",
+  "build_system": "None - static HTML file, Python script for data generation only",
+  "test_framework": "None - validation via Python script output verification",
+  "build_command": "python3 extract_premi_data.py (generates the data and updates HTML)",
+  "test_command": "python3 -c \"import json; data=json.loads(open('MPS_Flexi_Updated.html').read().split('const dataPremiJSON = ')[1].split(';')[0]); print(f'Total entries: {len(data)}'); assert len(data) > 100\"",
+  "verification_instructions": "1. Run the Python extraction script. 2. Verify the HTML file has a populated dataPremiJSON array. 3. Verify the calculator lookup function uses dataPremiJSON. 4. Count entries and verify they cover ages 0-30, 39, 65-70 for both genders and currencies.",
+  "snapshot_or_generated_files": "MPS_Flexi_Updated.html is the target file that gets updated with generated data",
+  "setup_instructions": "Python 3.9+ is available. No additional packages needed - uses zipfile, xml.etree.ElementTree, json, re (all stdlib).",
+  "environment_constraints": "No network needed. Python stdlib only. The xlsx file uses inline strings (t='inlineStr').",
+  "contribution_requirements": "Commit on a new branch with message: feat: populate MPS_Flexi_Updated.html with complete premium data from xlsx",
+  "key_patterns": "The xlsx has 2371 rows, first 76 are age selector UI (skip). Rows 76-2370 are 135 blocks of 17 rows each. Each block has: Amanah header(0), Amanah YRT/mb5/mb10(1-3), Berkah header(4), Berkah mb5/mb10/mb15(5-7), Cermat header(8), Cermat term15 mb5/10(9-10), Cermat term25 mb5/10/15(11-13), Cermat term35 mb5/10/15(14-16). Currency detection: header row col D = '1M' for IDR, contains 'Ribu' for USD. Age detection: Berkah offset 6 col B = term, age = 110 - term. Gender order within each age: first pair (IDR,USD) = Pria, second pair = Wanita. Rate in col D: IDR = value in Juta (multiply by 1,000,000), USD = integer (parse removing commas). '-' means no data.",
+  "relevant_files": [
+    "MPS_Flexi_Updated.html",
+    "Data_Premi_MPS_Clean.xlsx",
+    "Data_Premi_MPS_Clean.json"
+  ],
+  "directory_structure": "Single directory /projects/sandbox/MPS-Flexi/ with HTML files, xlsx/json data, and PDF references"
+}
