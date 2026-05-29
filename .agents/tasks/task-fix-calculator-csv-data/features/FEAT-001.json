@@ -1,0 +1,40 @@
+{
+  "id": "FEAT-001",
+  "type": "fix",
+  "description": "Generate the complete premium rate JSON database from CSV and rebuild the calculator JavaScript in MPS_Flexi_Updated.html with correct lookup logic, both calculation modes, proper validation, and all business rules.",
+  "status": "in_progress",
+  "steps": [
+    "Step 1: Create a Python script (generate_rate_db.py) that reads Data_Premi_MPS_Clean_FULL.csv with custom CSV parsing to handle thousand-separator commas. The parser must: split by comma, then for the rate fields (positions 6+), merge adjacent fields where the current field is pure digits (no decimal point) and the next field matches exactly 3 digits with optional decimal (regex: ^\\d{3}(\\.\\d+)?$). This handles values like '1,034.9' being split into '1' and '034.9'.",
+    "Step 2: The Python script builds a lookup object with keys in format 'CURRENCY|PLAN_SHORT|GENDER_SHORT|AGE|MASA_BAYAR|MASA_PERLINDUNGAN' where PLAN_SHORT is A/B/C, GENDER_SHORT is M/F, and values are arrays of 10 numeric rates (0 for unavailable). For Amanah: masa_perlindungan = Term column (YRT/5/10), masa_bayar = PPP column (1/5/10). For Berkah: masa_perlindungan always '110', masa_bayar = PPP (5/10/15). For Cermat: masa_perlindungan = Term column (15/25/35) with empty Term rows inheriting from previous non-empty Term row in same age/gender/currency group, masa_bayar = PPP (5/10/15).",
+    "Step 3: The script outputs the JSON database to stdout, which will be embedded in the HTML. Run the script to generate the JSON data.",
+    "Step 4: Replace the entire JavaScript section in MPS_Flexi_Updated.html (from <script> to </script>) with new code that: (a) Embeds the complete rate database as a const variable, (b) Implements lookup function getRates(currency, plan, gender, age, masaBayar, masaPerlindungan) that returns the 10-element rate array or null, (c) Implements the UP level arrays: IDR [100000000, 150000000, 200000000, 250000000, 300000000, 350000000, 500000000, 750000000, 1000000000, 5000000000] and USD [100000, 150000, 200000, 250000, 300000, 350000, 500000, 750000, 1000000, 5000000].",
+    "Step 5: Implement 'Berdasar UP' mode: Given user's UP input, find the matching UP level index (exact match or bracket between two levels). If exact match exists, use that rate directly (multiply by IDR multiplier 100000 or USD multiplier 1). If between two levels, use linear interpolation between the two nearest rates. If above max level (5B IDR / 5M USD) or below min level (100Jt IDR / 100K USD), show appropriate message. Apply frequency multiplier to get final per-period amount.",
+    "Step 6: Implement 'Berdasar Kontribusi/Premi' mode (only for Amanah as per current UI): Given user's annual budget, find which UP level produces a premi closest to (but not exceeding) the budget. Walk through the rate array, convert each rate to actual premi (rate * 100000 for IDR, rate * 1 for USD), find the UP level where premi <= budget. If budget falls between two UP levels, interpolate to find the estimated UP. Display the estimated UP/Santunan Asuransi.",
+    "Step 7: Fix the updateCalcUI() function: (a) For Plan A (Amanah): masa bayar options = 1 (YRT), 5, 10. Masa perlindungan = same as masa bayar (auto-set, disabled). Show method selector (UP vs Kontribusi). (b) For Plan B (Berkah): masa bayar = 5, 10, 15. Masa perlindungan = 'Sampai Usia 110' (fixed, disabled). Hide method selector, default to UP mode. (c) For Plan C (Cermat): masa bayar = 5, 10, 15. Masa perlindungan depends on masa bayar: PPP=5 allows Term 15/25/35, PPP=10 allows Term 15/25/35 EXCEPT check data availability, PPP=15 allows Term 25/35 only (no Term=15 for PPP=15 based on CSV data). Enable masa perlindungan selector. Hide method selector.",
+    "Step 8: Implement validation: (a) Check minimum annual premi against plan-specific minimums (Amanah: 4Jt IDR / 400 USD; Berkah/Cermat: 5Jt IDR / 500 USD). (b) Check minimum UP (100Jt IDR / 10K USD). (c) If lookup returns null or rate is 0 at the user's UP level, show 'Data tidak tersedia untuk kombinasi ini'. (d) Show warning messages in the calc-note element.",
+    "Step 9: Fix terminology based on plan type: For Syariah plans (A & B): UP label = 'Uang Santunan', Premi label = 'Kontribusi', customer = 'Peserta'. For Konvensional plan (C): UP = 'Uang Pertanggungan', Premi = 'Premi', customer = 'Nasabah'. Update all displayed labels dynamically when plan changes.",
+    "Step 10: Ensure the 'Berdasar Kontribusi' mode is available for ALL plans (not just Amanah). Update the method container visibility: show for all plans. In Kontribusi mode, user enters their annual budget and the calculator finds the maximum UP they can get. Update label to show 'Target Kontribusi Tahunan' for Syariah or 'Target Premi Tahunan' for Konvensional.",
+    "Step 11: Fix the Komisi password to '123' as specified in the requirements (currently set to 'manulife' in the code).",
+    "Step 12: Keep all existing HTML structure, CSS, tabs, content UNCHANGED. Only modify the <script> section and the komisi password check."
+  ],
+  "acceptance_criteria": [
+    "Calculator correctly returns ~Rp 4,120,000/year for Pria age 40, Amanah YRT, UP 1 Miliar, IDR",
+    "Calculator correctly returns ~Rp 20,650,000/year for Pria age 40, Berkah, Masa Bayar 15 tahun, UP 1 Miliar, IDR",
+    "Calculator correctly returns ~Rp 142,860,000/year for Pria age 40, Cermat, Term 15 tahun, Masa Bayar 5 tahun, UP 1 Miliar, IDR",
+    "USD mode works: Pria age 40, Amanah YRT, UP 1M USD returns premi USD 4,120",
+    "Frequency multipliers applied correctly: semesteran = annual * 0.525, kuartalan = annual * 0.275, bulanan = annual * 0.095",
+    "'Berdasar Kontribusi' mode: entering budget of Rp 50,000,000 for Berkah age 40 PPP=5 shows estimated UP around 1 Miliar",
+    "Minimum premi validation triggers correctly (shows warning when below 4Jt for Amanah, 5Jt for Berkah/Cermat)",
+    "Shows 'Data tidak tersedia' when selecting unavailable combinations (e.g., Amanah age 10)",
+    "Komisi tab unlocks with password '123'",
+    "All 3,760 rate entries from CSV are accessible via the calculator",
+    "Syariah terminology used for Plan A and B, conventional for Plan C"
+  ],
+  "verification": [
+    "Run python3 verification script that: (1) extracts the JSON from the generated HTML, (2) verifies 3 reference cases from PDF filenames match expected values within 5% tolerance, (3) checks total number of entries equals 3760",
+    "Manually verify in the HTML that the password '123' is used for Komisi tab",
+    "Verify the HTML file is valid (no unclosed tags in the script section)"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

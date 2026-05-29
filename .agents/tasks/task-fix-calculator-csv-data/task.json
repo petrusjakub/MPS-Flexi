@@ -1,0 +1,7 @@
+{
+  "task_id": "task-fix-calculator-csv-data",
+  "task_description": "Fix the MPS Flexi calculator in MPS_Flexi_Updated.html by replacing the mock getBaseRate() function with a complete rate database generated from Data_Premi_MPS_Clean_FULL.csv (3,976 rows, 3,760 valid entries). Fix all calculator logic including both calculation modes, validation, terminology, frequency multipliers, and the Komisi password.",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null
+}

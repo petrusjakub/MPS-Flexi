@@ -1,0 +1,37 @@
+{
+  "project_type": "Single-page HTML application with embedded JavaScript calculator for insurance premium rates",
+  "language": "HTML/CSS/JavaScript (vanilla, no frameworks)",
+  "build_system": "None - static HTML file, no build process required",
+  "test_framework": "None - manual verification via Python scripts against known reference values from PDF filenames",
+  "build_command": "N/A (static HTML)",
+  "test_command": "python3 verify_calculator.py (to be created as verification script)",
+  "verification_instructions": "1. Parse the generated HTML to extract the embedded JSON data. 2. Cross-reference premium values against known PDF reference cases: (a) Pria 40th Flexi A 1M Premi ~4jt MPP YRT, (b) Pria 40th Flexi B 1M Premi ~22jt MPP 15th, (c) Pria 40th Flexi C 1M Term 15th Premi ~140jt MPP 5th. 3. Verify all calculation modes produce correct output. 4. Verify frequency multipliers are applied correctly.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup needed. Python 3.11 available for CSV parsing scripts.",
+  "environment_constraints": "INTEGRATIONS_ONLY network mode. No external packages can be installed. Only Python standard library available (no openpyxl, pandas, etc.). CSV must be parsed with custom logic due to thousand-separator commas in numeric fields.",
+  "contribution_requirements": "Single HTML file must remain self-contained. All rate data must be embedded as JavaScript object within the HTML.",
+  "key_patterns": "Current HTML is 781 lines with CSS+HTML+JS in one file. Calculator uses tabs (tab6). Existing JS has a mock getBaseRate() function that only handles a few hardcoded age/gender combos and returns dummy '10000000' for all other cases.",
+  "relevant_files": [
+    "/projects/sandbox/MPS-Flexi/MPS_Flexi_Updated.html",
+    "/projects/sandbox/MPS-Flexi/Data_Premi_MPS_Clean_FULL.csv"
+  ],
+  "directory_structure": "Flat repo with HTML files, CSV data, PDFs, and XLS files. Main calculator file is MPS_Flexi_Updated.html.",
+  "data_structure_notes": {
+    "csv_parsing": "CSV has thousand-separator commas in numeric fields (e.g., '1,034.9' splits into multiple CSV fields). Must use custom parser that merges fields when a field is pure digits (no decimal) followed by a 3-digit field.",
+    "column_headers": "100_Ribu, 150_Ribu, 200_Ribu, 250_Ribu, 300_Ribu, 350_Ribu, 500_Ribu, 750_Ribu, 1_Juta, 5_Juta",
+    "up_levels_idr_juta": [100, 150, 200, 250, 300, 350, 500, 750, 1000, 5000],
+    "up_levels_usd": [100000, 150000, 200000, 250000, 300000, 350000, 500000, 750000, 1000000, 5000000],
+    "value_multiplier_idr": "cell_value * 100,000 = annual premi in Rupiah",
+    "value_multiplier_usd": "cell_value * 1 = annual premi in USD",
+    "zero_means_unavailable": "Cells with '-' in CSV represent unavailable combinations",
+    "plan_structure": {
+      "Flexi Amanah": "Term=YRT/5/10, PPP(MasaBayar)=1/5/10. Masa Perlindungan = Term. Ages with data: 18-70 (ages 0-17 all dashes). Some lower UP columns are '-' for younger ages (below min premi).",
+      "Flexi Berkah": "Masa Perlindungan always = 110 (until age 110). PPP=5/10/15. Term column shows (110-age) for PPP=5, empty for PPP=10/15. All ages 0-70 have rates.",
+      "Flexi Cermat": "Term=15/25/35 (Masa Perlindungan). PPP=5/10/15. Rows with empty Term inherit from the preceding non-empty Term row. All ages 0-70 have rates. NOTE: Term=15 only has PPP=5 and PPP=10 (no PPP=15)."
+    },
+    "non_linearity": "Berkah has volume discounts at higher UP levels (rate per 100Jt decreases). Amanah and Cermat are roughly linear.",
+    "frequency_multipliers": {"tahunan": 1, "semesteran": 0.525, "kuartalan": 0.275, "bulanan": 0.095},
+    "minimum_premi": {"Amanah_IDR": 4000000, "Amanah_USD": 400, "Berkah_IDR": 5000000, "Berkah_USD": 500, "Cermat_IDR": 5000000, "Cermat_USD": 500},
+    "minimum_up": {"IDR": 100000000, "USD": 10000}
+  }
+}
