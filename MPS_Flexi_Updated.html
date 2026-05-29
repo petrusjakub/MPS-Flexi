@@ -590,9 +590,6 @@ const RATE_DB = {"IDR|A|M|0|1|YRT":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],"ID
 const UP_LEVELS_IDR = [100000000,150000000,200000000,250000000,300000000,350000000,500000000,750000000,1000000000,5000000000];
 const UP_LEVELS_USD = [100000,150000,200000,250000,300000,350000,500000,750000,1000000,5000000];
 
-// Frequency multipliers
-const FREQ_MULTIPLIERS = {tahunan: 1, semesteran: 0.525, kuartalan: 0.275, bulanan: 0.095};
-
 // Minimum premi per plan
 const MIN_PREMI = {
     A: {IDR: 4000000, USD: 400},
@@ -824,24 +821,26 @@ function calculate() {
         if (resultUP <= 0) {
             resultPremiTahunan = 0;
         } else if (resultUP < upLevels[0]) {
-            // Below minimum UP level - extrapolate from first level
-            var baseRate = rates[0];
-            if (baseRate === 0) {
-                dataUnavailable = true;
-                warningText = "&#9888; Data tidak tersedia untuk kombinasi ini.";
-            } else {
-                var premiPerUnit = baseRate * rateMultiplier / upLevels[0];
-                resultPremiTahunan = Math.round(premiPerUnit * resultUP);
-            }
+            // Below minimum UP level - hard block, no calculation
+            dataUnavailable = true;
+            warningText = "&#9888; Data tidak tersedia. " + upTerm + " di bawah minimum (" +
+                (currency === 'IDR' ? 'Rp ' + upLevels[0].toLocaleString('id-ID') : 'USD ' + upLevels[0].toLocaleString('en-US')) + ").";
         } else if (resultUP >= upLevels[9]) {
-            // At or above max level
+            // At or above max level - cap at table maximum
             var baseRate = rates[9];
             if (baseRate === 0) {
                 dataUnavailable = true;
                 warningText = "&#9888; Data tidak tersedia untuk UP sebesar ini.";
             } else {
-                var premiPerUnit = baseRate * rateMultiplier / upLevels[9];
-                resultPremiTahunan = Math.round(premiPerUnit * resultUP);
+                // Use proportional scaling from max table level
+                resultPremiTahunan = Math.round(baseRate * rateMultiplier * resultUP / upLevels[9]);
+                var maxLabel = currency === 'IDR' ? 'Rp ' + upLevels[9].toLocaleString('id-ID') : 'USD ' + upLevels[9].toLocaleString('en-US');
+                warningText += "&#9888; UP melebihi tabel maksimum (" + maxLabel + "). Estimasi berdasarkan tarif UP " + maxLabel + ".";
+                if (plan === 'B') {
+                    warningText += " Untuk Plan Berkah (non-linear), premi aktual mungkin berbeda.<br>";
+                } else {
+                    warningText += "<br>";
+                }
             }
         } else {
             // Find bracket
@@ -932,6 +931,13 @@ function calculate() {
                 if (lastIdx >= 0) {
                     var premiPerUnit = rates[lastIdx] * rateMultiplier / upLevels[lastIdx];
                     foundUP = Math.round(budget / premiPerUnit);
+                    var maxLabel = currency === 'IDR' ? 'Rp ' + upLevels[lastIdx].toLocaleString('id-ID') : 'USD ' + upLevels[lastIdx].toLocaleString('en-US');
+                    warningText += "&#9888; " + premiTerm + " melebihi tabel maksimum (UP " + maxLabel + "). Estimasi berdasarkan tarif UP " + maxLabel + ".";
+                    if (plan === 'B') {
+                        warningText += " Untuk Plan Berkah (non-linear), UP aktual mungkin berbeda.<br>";
+                    } else {
+                        warningText += "<br>";
+                    }
                 }
             }
 

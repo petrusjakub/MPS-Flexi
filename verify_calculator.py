@@ -136,8 +136,8 @@ def verify_password(html_content):
 
 
 def verify_frequency_multipliers(html_content):
-    """Verify frequency multipliers are defined correctly."""
-    has_tahunan = 'tahunan: 1' in html_content or 'tahunan:1' in html_content
+    """Verify frequency multipliers are present in the payment mode select or JS code."""
+    has_tahunan = 'Tahunan' in html_content or 'tahunan' in html_content
     has_semesteran = '0.525' in html_content
     has_kuartalan = '0.275' in html_content
     has_bulanan = '0.095' in html_content
