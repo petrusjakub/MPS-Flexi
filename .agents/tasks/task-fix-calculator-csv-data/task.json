@@ -1,0 +1,14 @@
+{
+  "task_id": "task-fix-calculator-csv-data",
+  "task_description": "Fix the MPS Flexi calculator in MPS_Flexi_Updated.html by replacing the mock getBaseRate() function with a complete rate database generated from Data_Premi_MPS_Clean_FULL.csv (3,976 rows). Fix all calculator logic including both calculation modes, validation, terminology, frequency multipliers, and the Komisi password.",
+  "status": "completed",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null,
+  "verification": {
+    "build": "pass",
+    "tests": "pass",
+    "test_quality": "pass",
+    "docker_build": "skipped",
+    "summary": "All verifications pass. RATE_DB contains 3,976 entries covering all ages 0-70, both genders, 3 plans, 2 currencies. Reference test cases match exactly (0% deviation): Pria 40 Amanah YRT UP 1B = Rp 4,120,000; Pria 40 Berkah PP15 UP 1B = Rp 20,650,000; Pria 40 Cermat T15 PP5 UP 1B = Rp 142,860,000; USD mode verified. Password changed to 123. Frequency multipliers correct. Both Syariah/Konvensional terminology implemented. Data availability checks work for unavailable combinations."
+  }
+}
